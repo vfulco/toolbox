@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+<meta name="author" content="Matti Vuorre" />
+
+<meta name="date" content="2016-09-02" />
+
+<title>Reshape data between long and wide forms</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" />
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; background-color: #dddddd; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { font-weight: bold; } /* Keyword */
+code > span.dt { color: #800000; } /* DataType */
+code > span.dv { color: #0000ff; } /* DecVal */
+code > span.bn { color: #0000ff; } /* BaseN */
+code > span.fl { color: #800080; } /* Float */
+code > span.ch { color: #ff00ff; } /* Char */
+code > span.st { color: #dd0000; } /* String */
+code > span.co { color: #808080; font-style: italic; } /* Comment */
+code > span.al { color: #00ff00; font-weight: bold; } /* Alert */
+code > span.fu { color: #000080; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #ff0000; font-weight: bold; } /* Warning */
+code > span.cn { color: #000000; } /* Constant */
+code > span.sc { color: #ff00ff; } /* SpecialChar */
+code > span.vs { color: #dd0000; } /* VerbatimString */
+code > span.ss { color: #dd0000; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { } /* Variable */
+code > span.cf { } /* ControlFlow */
+code > span.op { } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { font-weight: bold; } /* Preprocessor */
+code > span.at { } /* Attribute */
+code > span.do { color: #808080; font-style: italic; } /* Documentation */
+code > span.an { color: #808080; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #808080; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #808080; font-weight: bold; font-style: italic; } /* Information */
+div.sourceCode {
+  overflow-x: visible;
+}
+</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("show" === "show");
+});
+</script>
+
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.9em;
+  padding-left: 5px;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html"></a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">
+    <span class="fa fa-home"></span>
+     
+    Toolbox
+  </a>
+</li>
+<li>
+  <a href="introduction.html">Introduction</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-download"></span>
+     
+    Import
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="import.html">Spreadsheets</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-cogs"></span>
+     
+    Wrangle
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="questionnaire.html">Questionnaire data</a>
+    </li>
+    <li>
+      <a href="reshape.html">Reshaping data</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-area-chart"></span>
+     
+    Visualize
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="plotting.html">Intro to ggplot2</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/mvuorre/toolbox">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+<div class="btn-group pull-right">
+<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Reshape data between long and wide forms</h1>
+<h4 class="author"><em>Matti Vuorre</em></h4>
+<h4 class="date"><em>2016-09-02</em></h4>
+
+</div>
+
+
+<p>A very common data wrangling task is to transform data between long and wide forms. It is often easier to enter data manually into a spreadsheet in the wide form, but computers prefer to read data in the long form. In this tutorial, I’ll show how to use R to transform data between these two forms with ease and style.</p>
+<div id="wide-and-long-forms" class="section level1">
+<h1>Wide and long forms</h1>
+<p>Although wide and long data formats are somewhat ill defined, they accurately capture two very common forms of data organization in psychological science. Here’s what they look like.</p>
+<div id="wide-form" class="section level2">
+<h2>Wide form</h2>
+<p>When data is in wide format, each participant’s (or whatever your cluster of measurement is) data is in a single row, and each column represents a different variable. For example, the <a href="questionnaire.html">Big 5 questionnaire data</a> is in wide form (only reading a subset of the data):</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(readr)
+wd &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;data/big5/countries/FI.csv&quot;</span>)[,<span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">7</span>:<span class="dv">17</span>)]</code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="right">age</th>
+<th align="left">country</th>
+<th align="right">E1</th>
+<th align="right">E2</th>
+<th align="right">E3</th>
+<th align="right">E4</th>
+<th align="right">E5</th>
+<th align="right">E6</th>
+<th align="right">E7</th>
+<th align="right">E8</th>
+<th align="right">E9</th>
+<th align="right">E10</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">49</td>
+<td align="left">FI</td>
+<td align="right">3</td>
+<td align="right">2</td>
+<td align="right">4</td>
+<td align="right">4</td>
+<td align="right">5</td>
+<td align="right">2</td>
+<td align="right">4</td>
+<td align="right">4</td>
+<td align="right">2</td>
+<td align="right">2</td>
+</tr>
+<tr class="even">
+<td align="right">19</td>
+<td align="left">FI</td>
+<td align="right">1</td>
+<td align="right">5</td>
+<td align="right">2</td>
+<td align="right">5</td>
+<td align="right">2</td>
+<td align="right">2</td>
+<td align="right">1</td>
+<td align="right">5</td>
+<td align="right">1</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="right">19</td>
+<td align="left">FI</td>
+<td align="right">4</td>
+<td align="right">4</td>
+<td align="right">2</td>
+<td align="right">4</td>
+<td align="right">2</td>
+<td align="right">4</td>
+<td align="right">2</td>
+<td align="right">5</td>
+<td align="right">1</td>
+<td align="right">4</td>
+</tr>
+<tr class="even">
+<td align="right">20</td>
+<td align="left">FI</td>
+<td align="right">2</td>
+<td align="right">2</td>
+<td align="right">3</td>
+<td align="right">4</td>
+<td align="right">3</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">3</td>
+<td align="right">2</td>
+<td align="right">5</td>
+</tr>
+<tr class="odd">
+<td align="right">17</td>
+<td align="left">FI</td>
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="right">3</td>
+<td align="right">5</td>
+<td align="right">4</td>
+<td align="right">2</td>
+<td align="right">1</td>
+<td align="right">5</td>
+<td align="right">1</td>
+<td align="right">2</td>
+</tr>
+<tr class="even">
+<td align="right">28</td>
+<td align="left">FI</td>
+<td align="right">2</td>
+<td align="right">4</td>
+<td align="right">3</td>
+<td align="right">5</td>
+<td align="right">3</td>
+<td align="right">2</td>
+<td align="right">2</td>
+<td align="right">5</td>
+<td align="right">1</td>
+<td align="right">4</td>
+</tr>
+</tbody>
+</table>
+<p>Each row in this data set represents all the variables collected for a single individual. For each individual, we have <code>age</code>, <code>country</code> of residence, and multiple measures of the Extroversion scale (sub-items), labelled <code>E1</code>, <code>E2</code>, …, <code>E10</code>. In the wide form, the variables are next to each other, in separate columns, and cells identify values.</p>
+</div>
+<div id="long-form" class="section level2">
+<h2>Long form</h2>
+<p>Data in the long format, on the other hand, has only one row per observation, and therefore multiple observations of a single individual are distributed to many rows. Each row, therefore, has a number of columns representing the context of the observation. For example, here’s some time-series data of a beaver’s body temperature (that’s right) in long form:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">b1 &lt;-<span class="st"> </span><span class="kw">head</span>(beaver1)[,-<span class="dv">4</span>]</code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="right">day</th>
+<th align="right">time</th>
+<th align="right">temp</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">346</td>
+<td align="right">840</td>
+<td align="right">36.33</td>
+</tr>
+<tr class="even">
+<td align="right">346</td>
+<td align="right">850</td>
+<td align="right">36.34</td>
+</tr>
+<tr class="odd">
+<td align="right">346</td>
+<td align="right">900</td>
+<td align="right">36.35</td>
+</tr>
+<tr class="even">
+<td align="right">346</td>
+<td align="right">910</td>
+<td align="right">36.42</td>
+</tr>
+<tr class="odd">
+<td align="right">346</td>
+<td align="right">920</td>
+<td align="right">36.55</td>
+</tr>
+<tr class="even">
+<td align="right">346</td>
+<td align="right">930</td>
+<td align="right">36.69</td>
+</tr>
+</tbody>
+</table>
+<p>Each row in this data set represents an observation, and we know of that observation it’s <code>day</code>, <code>time</code> and <code>temp</code> value.</p>
+<p>The long form is very useful for plotting time-series and other repeated measure data. For example, to plot the beaver’s body temperature in long form, we only specify an x-y pair where x and y are two columns in the data:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(beaver1$time, beaver1$temp, <span class="dt">type =</span> <span class="st">&quot;l&quot;</span>, 
+     <span class="dt">xlab =</span> <span class="st">&quot;Time&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;Beaver temperature&quot;</span>)</code></pre></div>
+<div class="figure" style="text-align: center">
+<img src="reshape_files/figure-html/plot-beavers-1.png" alt="Beaver temperature time-series." width="384" />
+<p class="caption">
+Beaver temperature time-series.
+</p>
+</div>
+</div>
+<div id="what-form" class="section level2">
+<h2>What form?</h2>
+<p>Sometimes it may not be as straightforward to identify data as long or wide format, because it may depend on what specific variable(s) you are interested in. Still, a good heuristic is that:</p>
+<blockquote>
+<p>Wide data has an individual’s multiple observations distributed across columns, and long data has an individual’s repeated observations distributed across rows.</p>
+</blockquote>
+<p>Next, let’s transform data between the two forms.</p>
+</div>
+</div>
+<div id="long-to-wide-transform" class="section level1">
+<h1>Long to wide transform</h1>
+<p>It is rarely useful to transform long time-series data to wide form, because computer programs like to take one vector of values (a column) for plotting or analysis. However, in many situations the long -&gt; wide transform is a useful operation. Here are two ways to do it in R, first using the <strong>tidyr</strong> package <span class="citation">(Wickham, 2016)</span>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyr)
+wb &lt;-<span class="st"> </span><span class="kw">spread</span>(<span class="dt">data =</span> b1, 
+             <span class="dt">key =</span> time,
+             <span class="dt">value =</span> temp)</code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="right">day</th>
+<th align="right">840</th>
+<th align="right">850</th>
+<th align="right">900</th>
+<th align="right">910</th>
+<th align="right">920</th>
+<th align="right">930</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">346</td>
+<td align="right">36.33</td>
+<td align="right">36.34</td>
+<td align="right">36.35</td>
+<td align="right">36.42</td>
+<td align="right">36.55</td>
+<td align="right">36.69</td>
+</tr>
+</tbody>
+</table>
+<p>The <code>spread()</code> function takes as input a data frame (<code>b1</code> where I’ve save the first few lines of the beaver data), a “key” variable, and a “value” variable. What <code>spread()</code> does, is it <em>spreads</em> the values of “value” across columns of the “key” variable. You can recognize the new column names as times of each observation. This data would less straightforward to plot as a time-series.</p>
+<p>An alternative, but very popular, command is <code>dcast()</code>, for “casting” long form data to wide data, from the <strong>reshape2</strong> package <span class="citation">(Wickham, 2007)</span>. This function takes a data frame, a casting formula, and a value variable:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(reshape2)
+<span class="kw">dcast</span>(b1, day ~<span class="st"> </span>time, <span class="dt">value.var =</span> <span class="st">&quot;temp&quot;</span>)</code></pre></div>
+<p>The <code>day ~ time</code> formula says that days identify rows (there’s only one day), and time should be distributed across columns, and cells should be filled with values of “temp”.</p>
+<p>Next, let’s transform from wide to long data.</p>
+</div>
+<div id="wide-to-long-transform" class="section level1">
+<h1>Wide to long transform</h1>
+<p>Think back to the Big 5 data set:</p>
+<table>
+<thead>
+<tr class="header">
+<th align="right">age</th>
+<th align="left">country</th>
+<th align="right">E1</th>
+<th align="right">E2</th>
+<th align="right">E3</th>
+<th align="right">E4</th>
+<th align="right">E5</th>
+<th align="right">E6</th>
+<th align="right">E7</th>
+<th align="right">E8</th>
+<th align="right">E9</th>
+<th align="right">E10</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">49</td>
+<td align="left">FI</td>
+<td align="right">3</td>
+<td align="right">2</td>
+<td align="right">4</td>
+<td align="right">4</td>
+<td align="right">5</td>
+<td align="right">2</td>
+<td align="right">4</td>
+<td align="right">4</td>
+<td align="right">2</td>
+<td align="right">2</td>
+</tr>
+<tr class="even">
+<td align="right">19</td>
+<td align="left">FI</td>
+<td align="right">1</td>
+<td align="right">5</td>
+<td align="right">2</td>
+<td align="right">5</td>
+<td align="right">2</td>
+<td align="right">2</td>
+<td align="right">1</td>
+<td align="right">5</td>
+<td align="right">1</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="right">19</td>
+<td align="left">FI</td>
+<td align="right">4</td>
+<td align="right">4</td>
+<td align="right">2</td>
+<td align="right">4</td>
+<td align="right">2</td>
+<td align="right">4</td>
+<td align="right">2</td>
+<td align="right">5</td>
+<td align="right">1</td>
+<td align="right">4</td>
+</tr>
+<tr class="even">
+<td align="right">20</td>
+<td align="left">FI</td>
+<td align="right">2</td>
+<td align="right">2</td>
+<td align="right">3</td>
+<td align="right">4</td>
+<td align="right">3</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">3</td>
+<td align="right">2</td>
+<td align="right">5</td>
+</tr>
+<tr class="odd">
+<td align="right">17</td>
+<td align="left">FI</td>
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="right">3</td>
+<td align="right">5</td>
+<td align="right">4</td>
+<td align="right">2</td>
+<td align="right">1</td>
+<td align="right">5</td>
+<td align="right">1</td>
+<td align="right">2</td>
+</tr>
+<tr class="even">
+<td align="right">28</td>
+<td align="left">FI</td>
+<td align="right">2</td>
+<td align="right">4</td>
+<td align="right">3</td>
+<td align="right">5</td>
+<td align="right">3</td>
+<td align="right">2</td>
+<td align="right">2</td>
+<td align="right">5</td>
+<td align="right">1</td>
+<td align="right">4</td>
+</tr>
+</tbody>
+</table>
+<p>Another way to think about this data is that there are only three variables per individual: <code>age</code>, <code>country</code>, and <code>item</code>. Each individual was repeatedly measured for different items. These items’ average could be considered as the individual’s Extroversion score. When repeated measures are collected into two columns, one identifying the variable (<code>item</code>, in this case, but could be, for example, measurement time), and another one identifying the value of the observation, the data is in long form, with respect to repeated measures of item. Here’s how to do it using the <strong>tidyr</strong> package <span class="citation">(Wickham, 2016)</span>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ld &lt;-<span class="st"> </span><span class="kw">gather</span>(<span class="dt">data =</span> wd, 
+             <span class="dt">key =</span> item, 
+             <span class="dt">value =</span> value, 
+             -<span class="kw">c</span>(age, country))</code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="right">age</th>
+<th align="left">country</th>
+<th align="left">item</th>
+<th align="right">value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">49</td>
+<td align="left">FI</td>
+<td align="left">E1</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="right">19</td>
+<td align="left">FI</td>
+<td align="left">E1</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="right">19</td>
+<td align="left">FI</td>
+<td align="left">E1</td>
+<td align="right">4</td>
+</tr>
+<tr class="even">
+<td align="right">20</td>
+<td align="left">FI</td>
+<td align="left">E1</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="right">17</td>
+<td align="left">FI</td>
+<td align="left">E1</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="right">28</td>
+<td align="left">FI</td>
+<td align="left">E1</td>
+<td align="right">2</td>
+</tr>
+</tbody>
+</table>
+<p>The <code>gather()</code> function makes reshaping data easy with only a few arguments: The user provides a data frame, names for the key (<code>item</code> in this case, which names the subscales) and value (the value of that observation) columns, and specifies which columns to gather into these key-value pairs. In this case, we selected all the E1, E2, …, E10 columns by <em>taking out age and country</em>. By doing this, <code>gather()</code> used all the columns to create key-value pairs, except those two. An equivalent call is to specify the E columns:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ld &lt;-<span class="st"> </span><span class="kw">gather</span>(<span class="dt">data =</span> wd, 
+             <span class="dt">key =</span> item, 
+             <span class="dt">value =</span> value, 
+             E1:E10)</code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="right">age</th>
+<th align="left">country</th>
+<th align="left">item</th>
+<th align="right">value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">49</td>
+<td align="left">FI</td>
+<td align="left">E1</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="right">19</td>
+<td align="left">FI</td>
+<td align="left">E1</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="right">19</td>
+<td align="left">FI</td>
+<td align="left">E1</td>
+<td align="right">4</td>
+</tr>
+<tr class="even">
+<td align="right">20</td>
+<td align="left">FI</td>
+<td align="left">E1</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="right">17</td>
+<td align="left">FI</td>
+<td align="left">E1</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="right">28</td>
+<td align="left">FI</td>
+<td align="left">E1</td>
+<td align="right">2</td>
+</tr>
+</tbody>
+</table>
+<p>Alternatively, in some cases it is easier to reshape the data by “melting” it with the <code>melt()</code> function, from the <strong>reshape2</strong> package <span class="citation">(Wickham, 2007)</span>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ld2 &lt;-<span class="st"> </span><span class="kw">melt</span>(wd, 
+            <span class="dt">id.vars =</span> <span class="kw">c</span>(<span class="st">&quot;age&quot;</span>, <span class="st">&quot;country&quot;</span>),
+            <span class="dt">variable.name =</span> <span class="st">&quot;item&quot;</span>)</code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="right">age</th>
+<th align="left">country</th>
+<th align="left">item</th>
+<th align="right">value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">49</td>
+<td align="left">FI</td>
+<td align="left">E1</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="right">19</td>
+<td align="left">FI</td>
+<td align="left">E1</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="right">19</td>
+<td align="left">FI</td>
+<td align="left">E1</td>
+<td align="right">4</td>
+</tr>
+<tr class="even">
+<td align="right">20</td>
+<td align="left">FI</td>
+<td align="left">E1</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="right">17</td>
+<td align="left">FI</td>
+<td align="left">E1</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="right">28</td>
+<td align="left">FI</td>
+<td align="left">E1</td>
+<td align="right">2</td>
+</tr>
+</tbody>
+</table>
+<p>The <code>melt()</code> function can sometimes be a little verbose, but perhaps easier to understand. The user needs to provide a data frame, <code>id.vars</code> which identify separate rows, and optionally names for the variable and value columns.</p>
+</div>
+<div id="conclusion" class="section level1">
+<h1>Conclusion</h1>
+<p>In many cases, data must be reshaped to suitable formats required for different analyses. Transforming between long and wide formats is a very common operation that can be achieved with ease in R. For longer discussions on tidying your data to appropriate formats, see the <a href="https://cran.r-project.org/web/packages/tidyr/vignettes/tidy-data.html"><strong>tidyr</strong> vignette</a> or <a href="http://vita.had.co.nz/papers/tidy-data.pdf">this paper</a> on data cleaning <span class="citation">(Wickham, 2014)</span>.</p>
+</div>
+<div id="references" class="section level1 unnumbered">
+<h1>References</h1>
+<div id="refs" class="references">
+<div id="ref-wickham_reshaping_2007">
+<p>Wickham, H. (2007). Reshaping data with the reshape package. <em>Journal of Statistical Software</em>, <em>21</em>(12), 1–20. Retrieved from <a href="http://www.jstatsoft.org/v21/i12/" class="uri">http://www.jstatsoft.org/v21/i12/</a></p>
+</div>
+<div id="ref-wickham_tidy_2014">
+<p>Wickham, H. (2014). Tidy data. <em>Journal of Statistical Software</em>, <em>59</em>(1), 1–23. <a href="http://doi.org/10.18637/jss.v059.i10" class="uri">http://doi.org/10.18637/jss.v059.i10</a></p>
+</div>
+<div id="ref-wickham_tidyr:_2016">
+<p>Wickham, H. (2016). <em>Tidyr: Easily tidy data with ‘</em>. Retrieved from <a href="https://CRAN.R-project.org/package=tidyr" class="uri">https://CRAN.R-project.org/package=tidyr</a></p>
+</div>
+</div>
+</div>
+
+<!DOCTYPE HTML>
+<!--custom footer for all pages-->
+<!--centered text class-->
+<style type="text/css">
+.center {
+    margin: auto;
+    text-align: center;
+    width: 60%;
+    padding: 10px;
+}
+</style>
+<hr>
+<p class="center">
+<a href="https://zenodo.org/badge/latestdoi/20002/mvuorre/toolbox"><img src="https://zenodo.org/badge/20002/mvuorre/toolbox.svg" alt="DOI"></a>
+</p>
+<br>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+$(document).ready(function () {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+});
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

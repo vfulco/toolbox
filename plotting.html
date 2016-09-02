@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+<meta name="author" content="Matti Vuorre" />
+
+<meta name="date" content="2016-09-02" />
+
+<title>Visualizing data with R</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" />
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; background-color: #dddddd; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { font-weight: bold; } /* Keyword */
+code > span.dt { color: #800000; } /* DataType */
+code > span.dv { color: #0000ff; } /* DecVal */
+code > span.bn { color: #0000ff; } /* BaseN */
+code > span.fl { color: #800080; } /* Float */
+code > span.ch { color: #ff00ff; } /* Char */
+code > span.st { color: #dd0000; } /* String */
+code > span.co { color: #808080; font-style: italic; } /* Comment */
+code > span.al { color: #00ff00; font-weight: bold; } /* Alert */
+code > span.fu { color: #000080; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #ff0000; font-weight: bold; } /* Warning */
+code > span.cn { color: #000000; } /* Constant */
+code > span.sc { color: #ff00ff; } /* SpecialChar */
+code > span.vs { color: #dd0000; } /* VerbatimString */
+code > span.ss { color: #dd0000; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { } /* Variable */
+code > span.cf { } /* ControlFlow */
+code > span.op { } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { font-weight: bold; } /* Preprocessor */
+code > span.at { } /* Attribute */
+code > span.do { color: #808080; font-style: italic; } /* Documentation */
+code > span.an { color: #808080; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #808080; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #808080; font-weight: bold; font-style: italic; } /* Information */
+div.sourceCode {
+  overflow-x: visible;
+}
+</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("show" === "show");
+});
+</script>
+
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.9em;
+  padding-left: 5px;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html"></a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">
+    <span class="fa fa-home"></span>
+     
+    Toolbox
+  </a>
+</li>
+<li>
+  <a href="introduction.html">Introduction</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-download"></span>
+     
+    Import
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="import.html">Spreadsheets</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-cogs"></span>
+     
+    Wrangle
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="questionnaire.html">Questionnaire data</a>
+    </li>
+    <li>
+      <a href="reshape.html">Reshaping data</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-area-chart"></span>
+     
+    Visualize
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="plotting.html">Intro to ggplot2</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/mvuorre/toolbox">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+<div class="btn-group pull-right">
+<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Visualizing data with R</h1>
+<h4 class="author"><em>Matti Vuorre</em></h4>
+<h4 class="date"><em>2016-09-02</em></h4>
+
+</div>
+
+
+<p>In this tutorial, we will use an openly available <a href="http://openpsychologydata.metajnl.com/articles/10.5334/jopd.ai/#">data set</a> on mental rotation of 3D figures <span class="citation">(<span class="citeproc-not-found" data-reference-id="ganis_new_2015"><strong>???</strong></span>)</span> to learn how to visualize data in R. In this study, 54 participants observed two 3D shapes on each trial, and judged whether the shapes were the same or not:</p>
+<blockquote>
+<p>The object on the left is always one of the 48 baseline objects (0 degree angular disparity). For the ‘same’ stimuli, the object on the right is the same as the one on the left, but is rotated around the vertical axis by 50, 100 or 150 degrees clockwise (when observed from above). <span class="citation">(<span class="citeproc-not-found" data-reference-id="ganis_new_2015"><strong>???</strong></span>)</span></p>
+</blockquote>
+<p><a href="http://openpsychologydata.metajnl.com/articles/10.5334/jopd.ai/#"><img src="images/Fig01_web.jpg" alt="stimulus" height="400" width="230"></a></p>
+<div id="importing-data" class="section level2">
+<h2>Importing data</h2>
+<p>The data files are in <code>toolbox/data/3dshapes/</code> as separate Excel spreadsheets for each participant. I’ve used the function below to combine all the participant-specific files into one master data file, which is also in the data folder. This function is a little complicated because the Excel files aren’t simple to work with, and some data was left out of the spreadsheets (subject numbers.) You can investigate the code below, or simply move on to loading the master data file.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(xlsx)
+batch_read &lt;-<span class="st"> </span>function(path, extension){
+    fnames &lt;-<span class="st"> </span><span class="kw">list.files</span>(path, <span class="dt">pattern =</span> extension)
+    fnames &lt;-<span class="st"> </span>fnames[fnames !=<span class="st"> &quot;demographics.xlsx&quot;</span>]
+    dl &lt;-<span class="st"> </span><span class="kw">lapply</span>(<span class="kw">paste0</span>(path, fnames), 
+                 read.xlsx,
+                 <span class="dt">sheetIndex =</span> <span class="dv">1</span>,
+                 <span class="dt">colIndex =</span> <span class="dv">1</span>:<span class="dv">7</span>,
+                 <span class="dt">colClasses =</span> <span class="kw">c</span>(<span class="st">&quot;integer&quot;</span>, <span class="st">&quot;character&quot;</span>, <span class="st">&quot;integer&quot;</span>,
+                         <span class="st">&quot;character&quot;</span>, <span class="st">&quot;character&quot;</span>, <span class="st">&quot;integer&quot;</span>, <span class="st">&quot;integer&quot;</span>),
+                 <span class="dt">stringsAsFactors =</span> F,
+                 <span class="dt">startRow =</span> <span class="dv">4</span>,
+                 <span class="dt">endRow =</span> <span class="dv">100</span>,
+                 <span class="dt">header =</span> T)
+    d &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(dl)
+    <span class="co"># Create IDs from filename: Always include data in the file, not filename</span>
+    d$Subject &lt;-<span class="st"> </span><span class="kw">rep</span>(fnames, <span class="dt">each =</span> <span class="dv">96</span>)
+    d$Subject &lt;-<span class="st"> </span><span class="kw">as.integer</span>(<span class="kw">unlist</span>(<span class="kw">regmatches</span>(d$Subject, <span class="kw">gregexpr</span>(<span class="st">&#39;[0-9]+&#39;</span>, d$Subject))))
+    d &lt;-<span class="st"> </span><span class="kw">select</span>(d, Subject, <span class="kw">everything</span>())
+}
+d &lt;-<span class="st"> </span><span class="kw">batch_read</span>(<span class="st">&quot;data/3dshapes/&quot;</span>, <span class="st">&quot;.xlsx&quot;</span>)
+<span class="kw">write_csv</span>(d, <span class="st">&quot;data/3dshapes/master.csv&quot;</span>)</code></pre></div>
+<p>I’ll read the combined data file and demographic information file into two separate objects. I’m using <code>read_csv()</code> instead of <code>read.csv()</code> because the resulting object is prettier when printed out in the console. Similarly, I’ll convert the demographic data into a <code>data_frame</code> from the original <code>data.frame</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(xlsx)
+d &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;data/3dshapes/master.csv&quot;</span>)  <span class="co"># Data</span>
+dem &lt;-<span class="st"> </span><span class="kw">read.xlsx</span>(<span class="st">&quot;data/3dshapes/demographics.xlsx&quot;</span>, 
+                 <span class="dt">sheetIndex =</span> <span class="dv">1</span>, <span class="dt">stringsAsFactors =</span> F)  <span class="co"># Demographics</span>
+dem &lt;-<span class="st"> </span><span class="kw">as_data_frame</span>(dem)</code></pre></div>
+<p>I’ll then remove rows with missing observations, and display the data:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">d &lt;-<span class="st"> </span><span class="kw">na.omit</span>(d)
+d</code></pre></div>
+<pre><code>## Source: local data frame [5,093 x 8]
+## 
+##    Subject Trial            Condition  Time response correct angle
+##      &lt;int&gt; &lt;int&gt;                &lt;chr&gt; &lt;int&gt;    &lt;chr&gt;   &lt;chr&gt; &lt;int&gt;
+## 1        1     1     R2_3_3_2_0Y0.pct  1355      [n]     [n]     0
+## 2        1     2  R3_4_3_2_90Y150.pct  2079      [n]     [n]   150
+## 3        1     3    2_4_4_2_0Y150.pct  1834      [b]     [b]   150
+## 4        1     4    3_3_3_2_0Y100.pct  4780      [b]     [b]   100
+## 5        1     5    3_3_3_3_90Y50.pct  1685      [b]     [b]    50
+## 6        1     6    R2_4_4_2_0Y50.pct  1237      [n]     [n]    50
+## 7        1     7  R3_3_3_3_90Y100.pct  2961      [n]     [n]   100
+## 8        1     8      2_3_3_2_0Y0.pct  1275      [b]     [b]     0
+## 9        1     9 R3_4_3_3_180Y150.pct  4716      [n]     [n]   150
+## 10       1    10  2_4_4_2_180Y150.pct  3794      [n]     [b]   150
+## ..     ...   ...                  ...   ...      ...     ...   ...
+## Variables not shown: correct.incorrect &lt;int&gt;.</code></pre>
+<p>I’ll change the variable names to lower case, and rename time to rt, and correct.incorrect to accuracy.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">names</span>(d) &lt;-<span class="st"> </span><span class="kw">tolower</span>(<span class="kw">names</span>(d))
+<span class="kw">names</span>(dem) &lt;-<span class="st"> </span><span class="kw">tolower</span>(<span class="kw">names</span>(dem))
+<span class="kw">names</span>(d)[<span class="dv">4</span>] &lt;-<span class="st"> &quot;rt&quot;</span>  <span class="co"># time</span>
+<span class="kw">names</span>(d)[<span class="dv">8</span>] &lt;-<span class="st"> &quot;accuracy&quot;</span>  <span class="co"># correct.incorrect</span></code></pre></div>
+<p>We might want to use the participants’ demographic information when drawing the figures. This will be much easier if the information is contained in the same data frame as the actual data, so I’ll join the data frames together:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">d &lt;-<span class="st"> </span><span class="kw">right_join</span>(dem, d)
+d &lt;-<span class="st"> </span><span class="kw">select</span>(d, -condition, -response, -correct)  <span class="co"># We don&#39;t need these variables</span>
+d</code></pre></div>
+<pre><code>## Source: local data frame [5,093 x 7]
+## 
+##    subject   age gender trial    rt angle accuracy
+##      &lt;dbl&gt; &lt;dbl&gt;  &lt;chr&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;    &lt;int&gt;
+## 1        1    31      M     1  1355     0        1
+## 2        1    31      M     2  2079   150        1
+## 3        1    31      M     3  1834   150        1
+## 4        1    31      M     4  4780   100        1
+## 5        1    31      M     5  1685    50        1
+## 6        1    31      M     6  1237    50        1
+## 7        1    31      M     7  2961   100        1
+## 8        1    31      M     8  1275     0        1
+## 9        1    31      M     9  4716   150        1
+## 10       1    31      M    10  3794   150        0
+## ..     ...   ...    ...   ...   ...   ...      ...</code></pre>
+<p>Now that the data is imported and sufficiently clean, we can start drawing figures. Let’s begin by investigating how reaction times are distributed across the angular disparities.</p>
+</div>
+<div id="reaction-time-figures" class="section level1 tabset">
+<h1>Reaction time figures</h1>
+<div id="histogram" class="section level2">
+<h2>Histogram</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">hist</span>(d$rt)</code></pre></div>
+<div class="figure" style="text-align: center">
+<img src="plotting_files/figure-html/unnamed-chunk-5-1.png" alt="Reaction time histogram." width="384" />
+<p class="caption">
+Reaction time histogram.
+</p>
+</div>
+<p>The <code>hist()</code> function provides easy access to drawing histograms, and can be customized with various options. See the help page for the function by typing <code>?hist</code> to the R console.</p>
+</div>
+<div id="boxplot" class="section level2">
+<h2>Boxplot</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">boxplot</span>(d$rt ~<span class="st"> </span>d$angle, <span class="dt">main =</span> <span class="st">&quot;Reaction times&quot;</span>, <span class="dt">xlab =</span> <span class="st">&quot;Angular disparity&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;RT (ms)&quot;</span>)</code></pre></div>
+<div class="figure" style="text-align: center">
+<img src="plotting_files/figure-html/unnamed-chunk-6-1.png" alt="Reaction times for different angular rotations." width="384" />
+<p class="caption">
+Reaction times for different angular rotations.
+</p>
+</div>
+<p>Boxplots are great for displaying summaries of multiple distributions simultaneously.</p>
+</div>
+</div>
+<div id="ggplot2" class="section level1">
+<h1>ggplot2</h1>
+<p>In the previous examples, we used <code>hist()</code> and <code>boxplot()</code> to draw the figures. These functions are included in the default R distribution, and therefore do not need to be installed separately. However, there are various add-on packages to R specifically for the purpose of drawing figures. In the remainder of this tutorial, we focus on one very popular plotting package, an R implementation of the grammar of graphics, <strong>ggplot2</strong> <span class="citation">(Wickham, 2009)</span>.</p>
+<p>ggplot2 has its own unique syntax for mapping aesthetics to data, and is a little complicated at first, compared to default R plotting functions, such as the ones covered above. The upshot is that ggplot2’s syntax is consistent, and can be used to create very complex graphics. Every ggplot2 graphic requires the user to input a data frame, specify which variables are mapped to which dimension of the graphic (x-axis, y-axis, color, size, transparency, etc.), and the geometric object of the data. Let’s take a look at how this works in practice by creating a scatterplot of reaction time on trial number.</p>
+<div id="scatterplot" class="section level2">
+<h2>Scatterplot</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> d, <span class="kw">aes</span>(<span class="dt">x =</span> trial, <span class="dt">y =</span> rt)) +<span class="st"> </span><span class="kw">geom_point</span>()</code></pre></div>
+<div class="figure" style="text-align: center">
+<img src="plotting_files/figure-html/ggplot-rt-trial-scatter-1-1.png" alt="Example ggplot2 scatterplot." width="384" />
+<p class="caption">
+Example ggplot2 scatterplot.
+</p>
+</div>
+<p>This line of code illustrates the fundamentals of drawing figures with ggplot2. The first argument to <code>ggplot()</code> is the data frame that contains the relevant variables and values. Second is the <code>aes()</code> function, that contains a list of variables mapped to the geometric and aesthetic dimensions of the plot, such as the x and y axes. Finally, we decided to display the variables using points, for a simple scatterplot, using <code>geom_point()</code>. Geoms are ggplot2’s way of defining what type of plot you are drawing, and I recommend you take a look at the <a href="http://docs.ggplot2.org/current/">website listing all the currently available geoms</a>. Note how the <code>geom_point()</code> was added to the ggplot using <code>+</code>. This suggests that we can add multiple geoms to one plot, such as a regression line on top of the scatterplot:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> d, <span class="kw">aes</span>(<span class="dt">x =</span> trial, <span class="dt">y =</span> rt)) +<span class="st"> </span>
+<span class="st">    </span><span class="kw">geom_point</span>() +
+<span class="st">    </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>)</code></pre></div>
+<div class="figure" style="text-align: center">
+<img src="plotting_files/figure-html/ggplot-rt-trial-scatter-2-1.png" alt="Example ggplot2 scatterplot with linear regression line." width="384" />
+<p class="caption">
+Example ggplot2 scatterplot with linear regression line.
+</p>
+</div>
+<p><code>geom_smooth()</code> can draw different types of model fits, and here we specified a linear regression model.</p>
+<p>Next, let’s try to draw the proportions of correct responses for each angular disparity. Barplots are commonly used to display continuous outcomes split by a categorical variable, but <a href="https://garstats.wordpress.com/2016/03/09/one-simple-step-to-improve-statistical-inferences/">bar graphs suck</a>, and we’ll therefore explore various alternative displays for the proportions.</p>
+</div>
+<div id="plotting-proportions" class="section level2 tabset">
+<h2>Plotting proportions</h2>
+<p>We begin by computing the proportions correct for each participant and angle using familiar commands from the <strong>dplyr</strong> package <span class="citation">(Wickham &amp; Francois, 2015)</span>. We’ll also compute group averages and save them into another data frame.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">props_subj &lt;-<span class="st"> </span><span class="kw">group_by</span>(d, subject, angle) %&gt;%<span class="st"> </span><span class="kw">summarize</span>(<span class="dt">pcorr =</span> <span class="kw">mean</span>(accuracy))
+props_avg &lt;-<span class="st"> </span><span class="kw">group_by</span>(d, angle) %&gt;%<span class="st"> </span><span class="kw">summarize</span>(<span class="dt">pcorr =</span> <span class="kw">mean</span>(accuracy))</code></pre></div>
+<p>We can then plot the data from these data frames, using various geoms</p>
+<div id="points" class="section level3">
+<h3>Points</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(props_subj, <span class="kw">aes</span>(<span class="dt">x=</span>angle, <span class="dt">y=</span>pcorr)) +
+<span class="st">    </span><span class="kw">geom_point</span>()</code></pre></div>
+<div class="figure" style="text-align: center">
+<img src="plotting_files/figure-html/ggplot-pcorr-plot-1a-1.png" alt="Proportion correct." width="384" />
+<p class="caption">
+Proportion correct.
+</p>
+</div>
+<p>It’s hard to see the individual points because of overlap, so a little jitter might help.</p>
+</div>
+<div id="points-jitter" class="section level3">
+<h3>Points (jitter)</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(props_subj, <span class="kw">aes</span>(<span class="dt">x=</span>angle, <span class="dt">y=</span>pcorr)) +
+<span class="st">    </span><span class="kw">geom_point</span>(<span class="dt">position =</span> <span class="kw">position_jitter</span>(<span class="dt">h =</span> <span class="dv">0</span>, <span class="dt">w =</span> <span class="dv">10</span>))</code></pre></div>
+<div class="figure" style="text-align: center">
+<img src="plotting_files/figure-html/ggplot-pcorr-plot-1b-1.png" alt="Proportion correct." width="384" />
+<p class="caption">
+Proportion correct.
+</p>
+</div>
+<p>Here we adjusted the individual points’ positions by jittering them horizontally. The <code>w = 10</code> argument specified the maximum width of the jitter, and <code>h = 0</code> specified zero height for the jitter.</p>
+</div>
+<div id="boxplots" class="section level3">
+<h3>Boxplots</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(props_subj, <span class="kw">aes</span>(<span class="dt">x=</span>angle, <span class="dt">y=</span>pcorr, <span class="dt">group=</span>angle)) +
+<span class="st">    </span><span class="kw">geom_boxplot</span>()</code></pre></div>
+<div class="figure" style="text-align: center">
+<img src="plotting_files/figure-html/ggplot-pcorr-plot-2-1.png" alt="Proportion correct." width="384" />
+<p class="caption">
+Proportion correct.
+</p>
+</div>
+<p>Because angle is a continuous variable in the data frame, I specified <code>group=angle</code> to draw a box for each angle.</p>
+</div>
+<div id="violin-plot" class="section level3">
+<h3>Violin plot</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(props_subj, <span class="kw">aes</span>(<span class="dt">x=</span>angle, <span class="dt">y=</span>pcorr, <span class="dt">group=</span>angle)) +
+<span class="st">    </span><span class="kw">geom_violin</span>(<span class="dt">col =</span> <span class="ot">NA</span>, <span class="dt">fill =</span> <span class="st">&quot;skyblue1&quot;</span>)</code></pre></div>
+<div class="figure" style="text-align: center">
+<img src="plotting_files/figure-html/ggplot-pcorr-plot-3-1.png" alt="Proportion correct." width="384" />
+<p class="caption">
+Proportion correct.
+</p>
+</div>
+</div>
+<div id="combined" class="section level3">
+<h3>Combined</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(props_subj, <span class="kw">aes</span>(<span class="dt">x=</span>angle, <span class="dt">y=</span>pcorr, <span class="dt">group=</span>angle)) +
+<span class="st">    </span><span class="kw">geom_violin</span>(<span class="dt">col =</span> <span class="ot">NA</span>, <span class="dt">fill =</span> <span class="st">&quot;skyblue1&quot;</span>) +
+<span class="st">    </span><span class="kw">geom_point</span>(<span class="dt">position =</span> <span class="kw">position_jitter</span>(<span class="dt">h =</span> <span class="dv">0</span>, <span class="dt">w =</span> <span class="dv">10</span>)) +
+<span class="st">    </span><span class="kw">geom_boxplot</span>(<span class="dt">width =</span> <span class="dv">5</span>, <span class="dt">outlier.color =</span> <span class="ot">NA</span>, <span class="dt">alpha =</span> .<span class="dv">5</span>)</code></pre></div>
+<div class="figure" style="text-align: center">
+<img src="plotting_files/figure-html/ggplot-pcorr-plot-4-1.png" alt="Proportion correct." width="384" />
+<p class="caption">
+Proportion correct.
+</p>
+</div>
+<p>Well this plot sure is ugly, but I wanted to point out that you can combine geoms within a single plot.</p>
+</div>
+</div>
+</div>
+<div id="further-reading" class="section level1">
+<h1>Further reading</h1>
+<p>Online tutorials:</p>
+<ul>
+<li><a href="http://seananderson.ca/ggplot2-FISH554/" class="uri">http://seananderson.ca/ggplot2-FISH554/</a></li>
+<li><a href="http://zevross.com/blog/2014/08/04/beautiful-plotting-in-r-a-ggplot2-cheatsheet-3/" class="uri">http://zevross.com/blog/2014/08/04/beautiful-plotting-in-r-a-ggplot2-cheatsheet-3/</a></li>
+<li><a href="http://zevross.com/blog/2015/01/13/a-new-data-processing-workflow-for-r-dplyr-magrittr-tidyr-ggplot2/">Data processing workflow</a></li>
+<li><a href="http://www.statmethods.net/">Quick-R</a>: <a href="http://www.statmethods.net/graphs/index.html">Basic</a> and <a href="http://www.statmethods.net/advgraphs/index.html">advanced</a> graphics</li>
+</ul>
+<p>Books:</p>
+<ul>
+<li>Graphical Data Analysis with R <span class="citation">(Unwin, 2015)</span></li>
+</ul>
+</div>
+<div id="references" class="section level1 unnumbered">
+<h1>References</h1>
+<div id="refs" class="references">
+<div id="ref-unwin_graphical_2015">
+<p>Unwin, A. (2015). <em>Graphical data analysis with r</em>. Chapman; Hall/CRC. Retrieved from <a href="http://www.gradaanwr.net/" class="uri">http://www.gradaanwr.net/</a></p>
+</div>
+<div id="ref-wickham_ggplot2:_2009">
+<p>Wickham, H. (2009). <em>Ggplot2: Elegant graphics for data analysis</em>. Springer Science &amp; Business Media.</p>
+</div>
+<div id="ref-wickham_dplyr:_2015">
+<p>Wickham, H., &amp; Francois, R. (2015). <em>Dplyr: A grammar of data manipulation</em>. Retrieved from <a href="http://CRAN.R-project.org/package=dplyr" class="uri">http://CRAN.R-project.org/package=dplyr</a></p>
+</div>
+</div>
+</div>
+
+<!DOCTYPE HTML>
+<!--custom footer for all pages-->
+<!--centered text class-->
+<style type="text/css">
+.center {
+    margin: auto;
+    text-align: center;
+    width: 60%;
+    padding: 10px;
+}
+</style>
+<hr>
+<p class="center">
+<a href="https://zenodo.org/badge/latestdoi/20002/mvuorre/toolbox"><img src="https://zenodo.org/badge/20002/mvuorre/toolbox.svg" alt="DOI"></a>
+</p>
+<br>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+$(document).ready(function () {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+});
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

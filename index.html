@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+<meta name="author" content="Matti Vuorre" />
+
+<meta name="date" content="2016-09-02" />
+
+<title>The Psychologist’s data toolbox 2.0</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" />
+
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("show" === "show");
+});
+</script>
+
+
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html"></a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">
+    <span class="fa fa-home"></span>
+     
+    Toolbox
+  </a>
+</li>
+<li>
+  <a href="introduction.html">Introduction</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-download"></span>
+     
+    Import
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="import.html">Spreadsheets</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-cogs"></span>
+     
+    Wrangle
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="questionnaire.html">Questionnaire data</a>
+    </li>
+    <li>
+      <a href="reshape.html">Reshaping data</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-area-chart"></span>
+     
+    Visualize
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="plotting.html">Intro to ggplot2</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/mvuorre/toolbox">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+<div class="btn-group pull-right">
+<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">The Psychologist’s data toolbox 2.0</h1>
+<h4 class="author"><em>Matti Vuorre</em></h4>
+<h4 class="date"><em>2016-09-02</em></h4>
+
+</div>
+
+
+<p>Welcome to the Psychologist’s data toolbox 2.0. This website contains educational materials on using <a href="https://www.r-project.org/"><strong>R</strong></a> and <a href="https://www.rstudio.com/"><strong>RStudio</strong></a> for effective data wrangling and visualization. In addition to introductory materials, there are tutorials for Psychology-specific data-analytic scenarios. Get started by clicking on the menu items above.</p>
+<p>For first-time R users, I recommend reading the sections of this website in order (from left to right in the above navigation bar.) First, you should read the <a href="introduction.html">introduction</a>, and then <a href="rrstudio.html">get to know the tools</a>. When you are familiar with the RStudio environment, common steps in the data-analytic workflow are covered in their typical order. If you already know how to import data, for example, skip that section and move right on to the next topics.</p>
+<ul>
+<li><a href="introduction.html">Introduction</a>
+<ul>
+<li>What is toolbox 2.0 and why do we need it?</li>
+</ul></li>
+<li><a href="rrstudio.html">R and RStudio</a>
+<ul>
+<li>Learn the basics of R and RStudio
+<ul>
+<li>No programming experience required</li>
+<li>100% success or money back guarantee</li>
+</ul></li>
+</ul></li>
+<li><a href="import.html">Importing data to R</a>
+<ul>
+<li>How to get data files to R</li>
+</ul></li>
+<li><a href="questionnaire.html">Data wrangling</a>
+<ul>
+<li>Get started with data wrangling using real questionnaire data</li>
+</ul></li>
+<li><a href="plotting.html">Data visualization</a>
+<ul>
+<li>Create common data visualizations in R</li>
+</ul></li>
+</ul>
+<p>Following data visualization, you would typically move to modelling the data, but this topic is outside the scope of these tutorials. I recommend reading a good textbook <span class="citation">(e.g. Kruschke, 2014; Maindonald &amp; Braun, 2010; McElreath, 2016)</span>.</p>
+<div id="references" class="section level1 unnumbered">
+<h1>References</h1>
+<div id="refs" class="references">
+<div id="ref-kruschke_doing_2014">
+<p>Kruschke, J. K. (2014). <em>Doing bayesian data analysis: A tutorial introduction with r</em> (2nd Edition). Burlington, MA: Academic Press.</p>
+</div>
+<div id="ref-maindonald_data_2010">
+<p>Maindonald, J., &amp; Braun, W. J. (2010). <em>Data analysis and graphics using r: An example-based approach</em> (Vol. 10). Cambridge University Press.</p>
+</div>
+<div id="ref-mcelreath_statistical_2016">
+<p>McElreath, R. (2016). <em>Statistical rethinking: A bayesian course with examples in r and stan</em>. CRC Press.</p>
+</div>
+</div>
+</div>
+
+<!DOCTYPE HTML>
+<!--custom footer for all pages-->
+<!--centered text class-->
+<style type="text/css">
+.center {
+    margin: auto;
+    text-align: center;
+    width: 60%;
+    padding: 10px;
+}
+</style>
+<hr>
+<p class="center">
+<a href="https://zenodo.org/badge/latestdoi/20002/mvuorre/toolbox"><img src="https://zenodo.org/badge/20002/mvuorre/toolbox.svg" alt="DOI"></a>
+</p>
+<br>
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+$(document).ready(function () {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+});
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

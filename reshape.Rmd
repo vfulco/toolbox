@@ -1,0 +1,131 @@
+---
+title: "Reshape data between long and wide forms"
+author: "Matti Vuorre"
+date: "`r Sys.Date()`"
+output: html_document
+bibliography: common/bibliography.bib
+csl: common/apa.csl
+---
+
+```{r setup, echo=F, warning=FALSE, message=FALSE, results = 'hide'}
+source("common/chunk_opts.R")
+opts_chunk$set(cache = F)
+options(knitr.table.format = 'markdown')
+opts_chunk$set(fig.width = 4, fig.height = 3)
+```
+
+A very common data wrangling task is to transform data between long and wide forms. It is often easier to enter data manually into a spreadsheet in the wide form, but computers prefer to read data in the long form. In this tutorial, I'll show how to use R to transform data between these two forms with ease and style.
+
+# Wide and long forms
+
+Although wide and long data formats are somewhat ill defined, they accurately capture two very common forms of data organization in psychological science. Here's what they look like.
+
+## Wide form
+
+When data is in wide format, each participant's (or whatever your cluster of measurement is) data is in a single row, and each column represents a different variable. For example, the [Big 5 questionnaire data](questionnaire.html) is in wide form (only reading a subset of the data):
+
+```{r big5data_wide, echo = -3}
+library(readr)
+wd <- read_csv("data/big5/countries/FI.csv")[,c(2, 7:17)]
+kable(wd[1:6, ])
+```
+
+Each row in this data set represents all the variables collected for a single individual. For each individual, we have `age`, `country` of residence, and multiple measures of the Extroversion scale (sub-items), labelled `E1`, `E2`, ..., `E10`. In the wide form, the variables are next to each other, in separate columns, and cells identify values. 
+
+## Long form
+
+Data in the long format, on the other hand, has only one row per observation, and therefore multiple observations of a single individual are distributed to many rows. Each row, therefore, has a number of columns representing the context of the observation. For example, here's some time-series data of a beaver's body temperature (that's right) in long form:
+
+```{r beavers, echo = -2}
+b1 <- head(beaver1)[,-4]
+kable(b1)
+```
+
+Each row in this data set represents an observation, and we know of that observation it's `day`, `time` and `temp` value.
+
+The long form is very useful for plotting time-series and other repeated measure data. For example, to plot the beaver's body temperature in long form, we only specify an x-y pair where x and y are two columns in the data:
+
+```{r plot-beavers, echo = -1, fig.cap = "Beaver temperature time-series."}
+beaver1 <- subset(beaver1, day == 346)
+plot(beaver1$time, beaver1$temp, type = "l", 
+     xlab = "Time", ylab = "Beaver temperature")
+```
+
+## What form?
+
+Sometimes it may not be as straightforward to identify data as long or wide format, because it may depend on what specific variable(s) you are interested in. Still, a good heuristic is that:
+
+>Wide data has an individual's multiple observations distributed across columns, and long data has an individual's repeated observations distributed across rows.
+
+Next, let's transform data between the two forms.
+
+# Long to wide transform
+
+It is rarely useful to transform long time-series data to wide form, because computer programs like to take one vector of values (a column) for plotting or analysis. However, in many situations the long -> wide transform is a useful operation. Here are two ways to do it in R, first using the __tidyr__ package [@wickham_tidyr:_2016]:
+
+```{r spread-beaver, echo = -3}
+library(tidyr)
+wb <- spread(data = b1, 
+             key = time,
+             value = temp)
+kable(wb)
+```
+
+The `spread()` function takes as input a data frame (`b1` where I've save the first few lines of the beaver data), a "key" variable, and a "value" variable. What `spread()` does, is it _spreads_ the values of "value" across columns of the "key" variable. You can recognize the new column names as times of each observation. This data would less straightforward to plot as a time-series.
+
+An alternative, but very popular, command is `dcast()`, for "casting" long form data to wide data, from the __reshape2__ package [@wickham_reshaping_2007]. This function takes a data frame, a casting formula, and a value variable:
+
+```{r cast-beaver, eval = F}
+library(reshape2)
+dcast(b1, day ~ time, value.var = "temp")
+```
+
+The `day ~ time` formula says that days identify rows (there's only one day), and time should be distributed across columns, and cells should be filled with values of "temp".
+
+Next, let's transform from wide to long data.
+
+# Wide to long transform
+
+Think back to the Big 5 data set:
+
+```{r big5print, echo = F}
+kable(wd[1:6, ])
+```
+
+Another way to think about this data is that there are only three variables per individual: `age`, `country`, and `item`. Each individual was repeatedly measured for different items. These items' average could be considered as the individual's Extroversion score. When repeated measures are collected into two columns, one identifying the variable (`item`, in this case, but could be, for example, measurement time), and another one identifying the value of the observation, the data is in long form, with respect to repeated measures of item. Here's how to do it using the __tidyr__ package [@wickham_tidyr:_2016]:
+
+```{r tidy2long, echo = -2}
+ld <- gather(data = wd, 
+             key = item, 
+             value = value, 
+             -c(age, country))
+kable(head(ld))
+```
+
+The `gather()` function makes reshaping data easy with only a few arguments: The user provides a data frame, names for the key (`item` in this case, which names the subscales) and value (the value of that observation) columns, and specifies which columns to gather into these key-value pairs. In this case, we selected all the E1, E2, ..., E10 columns by _taking out age and country_. By doing this, `gather()` used all the columns to create key-value pairs, except those two. An equivalent call is to specify the E columns:
+
+```{r tidy2long2, echo = -2}
+ld <- gather(data = wd, 
+             key = item, 
+             value = value, 
+             E1:E10)
+kable(head(ld))
+```
+
+Alternatively, in some cases it is easier to reshape the data by "melting" it with the `melt()` function, from the __reshape2__ package [@wickham_reshaping_2007]:
+
+```{r reshape2long, echo = -2}
+ld2 <- melt(wd, 
+            id.vars = c("age", "country"),
+            variable.name = "item")
+kable(head(ld2))
+```
+
+The `melt()` function can sometimes be a little verbose, but perhaps easier to understand. The user needs to provide a data frame, `id.vars` which identify separate rows, and optionally names for the variable and value columns.
+
+# Conclusion
+
+In many cases, data must be reshaped to suitable formats required for different analyses. Transforming between long and wide formats is a very common operation that can be achieved with ease in R. For longer discussions on tidying your data to appropriate formats, see the [__tidyr__ vignette](https://cran.r-project.org/web/packages/tidyr/vignettes/tidy-data.html) or [this paper](http://vita.had.co.nz/papers/tidy-data.pdf) on data cleaning [@wickham_tidy_2014].
+
+
+# References

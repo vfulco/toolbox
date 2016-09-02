@@ -1,0 +1,43 @@
+name: "Toolbox 2.0"
+output_dir: "."
+output:
+  html_document:
+    theme: cosmo
+    highlight: kate
+    toc: true
+    toc_float: true
+    code_folding: show
+    fig_caption: true
+    number_section: false
+    self_contained: true
+    include:
+      after_body: common/foot.html
+navbar:
+  # title: "Toolbox 2.0"
+  # type: inverse
+  left:
+    - text: "Toolbox"
+      icon: fa-home
+      href: index.html
+    - text: "Introduction"
+      href: introduction.html
+    - text: "Import"
+      icon: fa-download
+      menu:
+        - text: "Spreadsheets"
+          href: import.html
+    - text: "Wrangle"
+      icon: fa-cogs
+      menu:
+        - text: "Questionnaire data"
+          href: questionnaire.html
+        - text: "Reshaping data"
+          href: reshape.html
+    - text: "Visualize"
+      icon: fa-area-chart
+      menu:
+        - text: "Intro to ggplot2"
+          href: plotting.html
+  right:
+    - icon: fa-github fa-lg
+      href: https://github.com/mvuorre/toolbox
