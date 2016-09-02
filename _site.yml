@@ -2,7 +2,7 @@ name: "Toolbox 2.0"
 output_dir: "."
 output:
   html_document:
-    theme: cosmo
+    theme: sandstone
     highlight: kate
     toc: true
     toc_float: true
@@ -13,14 +13,13 @@ output:
     include:
       after_body: common/foot.html
 navbar:
-  # title: "Toolbox 2.0"
+  title: "Toolbox 2.0"
+  icon: fa-home
   # type: inverse
   left:
-    - text: "Toolbox"
-      icon: fa-home
-      href: index.html
-    - text: "Introduction"
-      href: introduction.html
+    - text: "R & RStudio"
+      icon: fa-code
+      href: rrstudio.html
     - text: "Import"
       icon: fa-download
       menu:
@@ -29,10 +28,10 @@ navbar:
     - text: "Wrangle"
       icon: fa-cogs
       menu:
-        - text: "Questionnaire data"
-          href: questionnaire.html
         - text: "Reshaping data"
           href: reshape.html
+        - text: "Questionnaire data"
+          href: questionnaire.html
     - text: "Visualize"
       icon: fa-area-chart
       menu:

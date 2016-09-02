@@ -20,7 +20,7 @@
 <link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
 <script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<link href="site_libs/bootstrap-3.3.5/css/sandstone.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
@@ -131,34 +131,34 @@ button.code-folding-btn:focus {
 <style type="text/css">
 /* padding for bootstrap navbar */
 body {
-  padding-top: 51px;
+  padding-top: 61px;
   padding-bottom: 40px;
 }
 /* offset scroll position for anchor links (for fixed navbar)  */
 .section h1 {
-  padding-top: 56px;
-  margin-top: -56px;
+  padding-top: 66px;
+  margin-top: -66px;
 }
 
 .section h2 {
-  padding-top: 56px;
-  margin-top: -56px;
+  padding-top: 66px;
+  margin-top: -66px;
 }
 .section h3 {
-  padding-top: 56px;
-  margin-top: -56px;
+  padding-top: 66px;
+  margin-top: -66px;
 }
 .section h4 {
-  padding-top: 56px;
-  margin-top: -56px;
+  padding-top: 66px;
+  margin-top: -66px;
 }
 .section h5 {
-  padding-top: 56px;
-  margin-top: -56px;
+  padding-top: 66px;
+  margin-top: -66px;
 }
 .section h6 {
-  padding-top: 56px;
-  margin-top: -56px;
+  padding-top: 66px;
+  margin-top: -66px;
 }
 </style>
 
@@ -306,19 +306,16 @@ div.tocify {
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="index.html"></a>
+      <a class="navbar-brand" href="index.html">Toolbox 2.0</a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="index.html">
-    <span class="fa fa-home"></span>
+  <a href="rrstudio.html">
+    <span class="fa fa-code"></span>
      
-    Toolbox
+    R &amp; RStudio
   </a>
-</li>
-<li>
-  <a href="introduction.html">Introduction</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -344,10 +341,10 @@ div.tocify {
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="questionnaire.html">Questionnaire data</a>
+      <a href="reshape.html">Reshaping data</a>
     </li>
     <li>
-      <a href="reshape.html">Reshaping data</a>
+      <a href="questionnaire.html">Questionnaire data</a>
     </li>
   </ul>
 </li>
@@ -436,8 +433,7 @@ dem &lt;-<span class="st"> </span><span class="kw">as_data_frame</span>(dem)</co
 <p>I’ll then remove rows with missing observations, and display the data:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">d &lt;-<span class="st"> </span><span class="kw">na.omit</span>(d)
 d</code></pre></div>
-<pre><code>## Source: local data frame [5,093 x 8]
-## 
+<pre><code>## # A tibble: 5,093 x 8
 ##    Subject Trial            Condition  Time response correct angle
 ##      &lt;int&gt; &lt;int&gt;                &lt;chr&gt; &lt;int&gt;    &lt;chr&gt;   &lt;chr&gt; &lt;int&gt;
 ## 1        1     1     R2_3_3_2_0Y0.pct  1355      [n]     [n]     0
@@ -450,8 +446,7 @@ d</code></pre></div>
 ## 8        1     8      2_3_3_2_0Y0.pct  1275      [b]     [b]     0
 ## 9        1     9 R3_4_3_3_180Y150.pct  4716      [n]     [n]   150
 ## 10       1    10  2_4_4_2_180Y150.pct  3794      [n]     [b]   150
-## ..     ...   ...                  ...   ...      ...     ...   ...
-## Variables not shown: correct.incorrect &lt;int&gt;.</code></pre>
+## # ... with 5,083 more rows, and 1 more variables: correct.incorrect &lt;int&gt;</code></pre>
 <p>I’ll change the variable names to lower case, and rename time to rt, and correct.incorrect to accuracy.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">names</span>(d) &lt;-<span class="st"> </span><span class="kw">tolower</span>(<span class="kw">names</span>(d))
 <span class="kw">names</span>(dem) &lt;-<span class="st"> </span><span class="kw">tolower</span>(<span class="kw">names</span>(dem))
@@ -461,8 +456,7 @@ d</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">d &lt;-<span class="st"> </span><span class="kw">right_join</span>(dem, d)
 d &lt;-<span class="st"> </span><span class="kw">select</span>(d, -condition, -response, -correct)  <span class="co"># We don&#39;t need these variables</span>
 d</code></pre></div>
-<pre><code>## Source: local data frame [5,093 x 7]
-## 
+<pre><code>## # A tibble: 5,093 x 7
 ##    subject   age gender trial    rt angle accuracy
 ##      &lt;dbl&gt; &lt;dbl&gt;  &lt;chr&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;    &lt;int&gt;
 ## 1        1    31      M     1  1355     0        1
@@ -475,7 +469,7 @@ d</code></pre></div>
 ## 8        1    31      M     8  1275     0        1
 ## 9        1    31      M     9  4716   150        1
 ## 10       1    31      M    10  3794   150        0
-## ..     ...   ...    ...   ...   ...   ...      ...</code></pre>
+## # ... with 5,083 more rows</code></pre>
 <p>Now that the data is imported and sufficiently clean, we can start drawing figures. Let’s begin by investigating how reaction times are distributed across the angular disparities.</p>
 </div>
 <div id="reaction-time-figures" class="section level1 tabset">

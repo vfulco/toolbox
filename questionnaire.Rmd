@@ -1,7 +1,6 @@
 ---
 title: "Questionnaire data"
 author: "Matti Vuorre"
-date: "`r Sys.Date()`"
 output: html_document
 bibliography: common/bibliography.bib
 csl: common/apa.csl
@@ -15,7 +14,7 @@ source("common/chunk_opts.R")
 
 For this project we'll be using a real data set, consisting of 19,719 individual's responses to 50 questionnaire items that together constitute the Big Five personality scale. Additionally, each respondent provided their gender, age, race, native language and country. With this many respondents, items responded to, and categories by which we can split the responses, we can get answers to a rich set of questions. The data set is available [here](http://personality-testing.info/_rawdata/BIG5.zip), and you can complete the scale yourself on [this website](http://personality-testing.info/).
 
-Before we begin wrangling the data, we'll go through an extremely important topic: Project Organization.
+Before we begin wrangling the data, we'll go through an important topic: Project Organization.
 
 # Organizing a Project
 
@@ -41,7 +40,7 @@ If you downloaded all of the [Toolbox 2.0](https://mvuorre.github.io/toolbox/) m
 
 # Prepare a session in RStudio
 
-Before we can access the data in RStudio, we need to set the working directory. Do __not__ set working directories in your script, because these calls make others with different root folder structures (usernames, systems, etc.) unable to run your script without changing these arguments. Instead, you can simply click the Set As Working Directory button in RStudio as described in [here](http://mvuorre.github.io/toolbox/rrstudio/rrstudio.html#Get_started_with_RStudio).
+Before we can access the data in RStudio, we need to set the working directory. Do __not__ set working directories in your script, because these calls make others with different root folder structures (usernames, systems, etc.) unable to run your script without changing these arguments. Instead, you can simply click the Set As Working Directory button in RStudio (under the "More" button.)
 
 The raw data downloaded from the [website](http://personality-testing.info/_rawdata/BIG5.zip) is a neat and simple spreadsheet of data, which we will load into the R workspace.
 
@@ -132,7 +131,7 @@ Let's see what we ended up with:
 kable(head(d[,1:10]))
 ```
 
-Much better! Now we can immediately see meaningful values of race, gender, etc. See [here](multisource.html#Bonus_round) for how to change the two-letter country codes to actual country names.
+Much better! Now we can immediately see meaningful values of race, gender, etc.
 
 ## Basic summaries
 
@@ -211,7 +210,7 @@ plot_args <- c(l$plots, nrow=2)
 do.call(grid.arrange, plot_args)
 ```
 
-This figure took me about 10 minutes to make. But if I want to change something in it (aesthetics, grouping variables, exclude or include more data, manipulations...), it will take me about 20 seconds and the plot is redrawn with the desired changes. Do that in SPSS or Excel! And this is the point, we want to be able to _quickly_ investigate our data from multiple angles. We'll learn just that in the next section.
+This figure took me about 10 minutes to make. But if I want to change something in it (aesthetics, grouping variables, exclude or include more data, manipulations...), it will take me about 10 _seconds_ and the plot is redrawn with the desired changes. Do that in SPSS or Excel! And this is the point, we want to be able to _quickly_ investigate our data from multiple angles. We'll learn just that in the next section.
 
 # More summaries
 

@@ -20,7 +20,7 @@
 <link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
 <script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<link href="site_libs/bootstrap-3.3.5/css/sandstone.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
@@ -131,34 +131,34 @@ button.code-folding-btn:focus {
 <style type="text/css">
 /* padding for bootstrap navbar */
 body {
-  padding-top: 51px;
+  padding-top: 61px;
   padding-bottom: 40px;
 }
 /* offset scroll position for anchor links (for fixed navbar)  */
 .section h1 {
-  padding-top: 56px;
-  margin-top: -56px;
+  padding-top: 66px;
+  margin-top: -66px;
 }
 
 .section h2 {
-  padding-top: 56px;
-  margin-top: -56px;
+  padding-top: 66px;
+  margin-top: -66px;
 }
 .section h3 {
-  padding-top: 56px;
-  margin-top: -56px;
+  padding-top: 66px;
+  margin-top: -66px;
 }
 .section h4 {
-  padding-top: 56px;
-  margin-top: -56px;
+  padding-top: 66px;
+  margin-top: -66px;
 }
 .section h5 {
-  padding-top: 56px;
-  margin-top: -56px;
+  padding-top: 66px;
+  margin-top: -66px;
 }
 .section h6 {
-  padding-top: 56px;
-  margin-top: -56px;
+  padding-top: 66px;
+  margin-top: -66px;
 }
 </style>
 
@@ -306,19 +306,16 @@ div.tocify {
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="index.html"></a>
+      <a class="navbar-brand" href="index.html">Toolbox 2.0</a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="index.html">
-    <span class="fa fa-home"></span>
+  <a href="rrstudio.html">
+    <span class="fa fa-code"></span>
      
-    Toolbox
+    R &amp; RStudio
   </a>
-</li>
-<li>
-  <a href="introduction.html">Introduction</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -344,10 +341,10 @@ div.tocify {
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="questionnaire.html">Questionnaire data</a>
+      <a href="reshape.html">Reshaping data</a>
     </li>
     <li>
-      <a href="reshape.html">Reshaping data</a>
+      <a href="questionnaire.html">Questionnaire data</a>
     </li>
   </ul>
 </li>
@@ -514,7 +511,7 @@ wd &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="s
 </div>
 <div id="long-form" class="section level2">
 <h2>Long form</h2>
-<p>Data in the long format, on the other hand, has only one row per observation, and therefore multiple observations of a single individual are distributed to many rows. Each row, therefore, has a number of columns representing the context of the observation. For example, here’s some time-series data of a beaver’s body temperature (that’s right) in long form:</p>
+<p>Data in the long format, on the other hand, has only one row per observation, and therefore multiple observations of a single individual are distributed to many rows. Each row, therefore, has a number of columns representing the context of the observation. For example, here’s some time-series data of a beaver’s body temperature in long form:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">b1 &lt;-<span class="st"> </span><span class="kw">head</span>(beaver1)[,-<span class="dv">4</span>]</code></pre></div>
 <table>
 <thead>

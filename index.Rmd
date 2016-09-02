@@ -13,22 +13,25 @@ csl: common/apa.csl
 source("common/chunk_opts.R")
 ```
 
-Welcome to the Psychologist's data toolbox 2.0. This website contains educational materials on using [__R__](https://www.r-project.org/) and [__RStudio__](https://www.rstudio.com/) for effective data wrangling and visualization. In addition to introductory materials, there are tutorials for Psychology-specific data-analytic scenarios. Get started by clicking on the menu items above.
+Welcome to the Psychologist's data toolbox 2.0. This website contains educational materials on using [__R__](https://www.r-project.org/) and [__RStudio__](https://www.rstudio.com/) for effective data wrangling, visualization and analysis. In addition to introductory materials, there are tutorials for Psychology-specific data-analytic scenarios. Get started by clicking on the menu items above. For first-time R users, I recommend reading the sections of this website in order (from left to right in the above navigation bar.) 
 
-For first-time R users, I recommend reading the sections of this website in order (from left to right in the above navigation bar.) First, you should read the [introduction](introduction.html), and then [get to know the tools](rrstudio.html). When you are familiar with the RStudio environment, common steps in the data-analytic workflow are covered in their typical order. If you already know how to import data, for example, skip that section and move right on to the next topics.
+# Introduction
 
-* [Introduction](introduction.html)
-    * What is toolbox 2.0 and why do we need it?
-* [R and RStudio](rrstudio.html)
-    * Learn the basics of R and RStudio
-        - No programming experience required
-        - 100% success or money back guarantee
-* [Importing data to R](import.html)
-    * How to get data files to R
-* [Data wrangling](questionnaire.html)
-    * Get started with data wrangling using real questionnaire data
-* [Data visualization](plotting.html)
-    * Create common data visualizations in R
+Many introductory statistics and research methods courses in psychology teach a particular workflow for moving from raw data to figures and statistical tests. This workflow heavily depends on two commercial tools: Microsoft Excel and IBM SPSS. Students of these courses are instructed to perform basic data manipulation tasks, such as renaming variables, aggregating ("pivot tables") and subsetting data, etc., in Excel before proceeding to creating figures (in Excel or SPSS) and performing statistical inference (usually in SPSS.)
+
+Based on my experience, this workflow is also common among researchers. Although skilled analysts can and do perfrom brilliantly when constrained by this basic recipe, better alternatives have, unsurprisingly, sprung up in the past two decades. I propose that by abandoning this Excel -> SPSS workflow (repeated _ad nauseam_ with slight tweaks that require many a buttons to be repeatedly clicked), students and researchers gain a better understanding of their data, and become better equipped to rapidly investigate their data from multiple angles. Specifically, the approach I recommend is based on _programming your analysis_. For statistical programming, we will focus on the R programming language. (For an in-depth analysis of how R has overtaken SPSS on almost any metric, see [this post](http://r4stats.com/articles/popularity/).)
+
+Data is often messy and needs all sorts of transforms before it can be formally analyzed. Because this initial "data wrangling" usually needs to be repeated multiple times, the task can be greatly sped up by eschewing the use of Excel in favor of a programming language, where changing a few variables or arguments does what requires a completely new walk-through of the data in Excel. Similarly, because figures need to be repeatedly generated, creating them using code greatly reduces the required time for this step of a data-analytic workflow.
+
+## Programming is your friend
+
+I recommend you follow the examples here by typing them into your own R script files, and execute them on your own computer. No prior knowledge of R or programming in general is required. However, programming is hard, and you learn it by doing it. Prepare to be frustrated, it is a natural part of learning programming.
+
+# This tutorial
+
+This tutorial consists of modules, where R is put to its proper use in wrangling different types of data. Users who wish to execute the code as they follow along should download [this zip file](https://github.com/mvuorre/toolbox/archive/master.zip) and place its contents somewhere on their hard disk. This archive contains all the materials required to reproduce every exercise and command presented on these pages. After downloading the zip file, extract its contents in an appropriate location on your hard drive, say your Documents folder. The unzipped folder is called `toolbox-master`, but you should rename it to `toolbox` (my apologies, this is a GitHub quirk.) 
+
+# What is not covered
 
 Following data visualization, you would typically move to modelling the data, but this topic is outside the scope of these tutorials. I recommend reading a good textbook [e.g. @kruschke_doing_2014; @maindonald_data_2010; @mcelreath_statistical_2016]. 
 

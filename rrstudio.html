@@ -20,7 +20,7 @@
 <link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
 <script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<link href="site_libs/bootstrap-3.3.5/css/sandstone.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
@@ -131,34 +131,34 @@ button.code-folding-btn:focus {
 <style type="text/css">
 /* padding for bootstrap navbar */
 body {
-  padding-top: 51px;
+  padding-top: 61px;
   padding-bottom: 40px;
 }
 /* offset scroll position for anchor links (for fixed navbar)  */
 .section h1 {
-  padding-top: 56px;
-  margin-top: -56px;
+  padding-top: 66px;
+  margin-top: -66px;
 }
 
 .section h2 {
-  padding-top: 56px;
-  margin-top: -56px;
+  padding-top: 66px;
+  margin-top: -66px;
 }
 .section h3 {
-  padding-top: 56px;
-  margin-top: -56px;
+  padding-top: 66px;
+  margin-top: -66px;
 }
 .section h4 {
-  padding-top: 56px;
-  margin-top: -56px;
+  padding-top: 66px;
+  margin-top: -66px;
 }
 .section h5 {
-  padding-top: 56px;
-  margin-top: -56px;
+  padding-top: 66px;
+  margin-top: -66px;
 }
 .section h6 {
-  padding-top: 56px;
-  margin-top: -56px;
+  padding-top: 66px;
+  margin-top: -66px;
 }
 </style>
 
@@ -306,19 +306,16 @@ div.tocify {
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="index.html"></a>
+      <a class="navbar-brand" href="index.html">Toolbox 2.0</a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="index.html">
-    <span class="fa fa-home"></span>
+  <a href="rrstudio.html">
+    <span class="fa fa-code"></span>
      
-    Toolbox
+    R &amp; RStudio
   </a>
-</li>
-<li>
-  <a href="introduction.html">Introduction</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -344,10 +341,10 @@ div.tocify {
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="questionnaire.html">Questionnaire data</a>
+      <a href="reshape.html">Reshaping data</a>
     </li>
     <li>
-      <a href="reshape.html">Reshaping data</a>
+      <a href="questionnaire.html">Questionnaire data</a>
     </li>
   </ul>
 </li>
@@ -412,7 +409,7 @@ div.tocify {
 <p>Go ahead and open RStudio on your computer. You will see a four-panel layout similar to what I’ve shown above.</p>
 <p>The two panels on the left, which I chose to display with a black background for my aesthetic preferences, are your main “blackboard”: You write commands in the <strong>source</strong> panel on the top, and view output in the <strong>console</strong> below. The crucial difference between these two panels is that if you type commands directly into the console, R evaluates the command but doesn’t save the command itself. The source panel is a fancy text editor that allows you to type code just as you would in a text editor, but also allows you to execute the code, the results of which are then displayed in the console below. You should always write your code in the source panel, so that you will be able to save your work at the end of your coding session. To execute code in the source panel, press <kbd>Cmd + return</kbd> on the line you’d like to run.</p>
 <p>The two panels on the right are for maintaining the working environment, displaying plots, and doing all sorts of other miscellaneous neat things. The upper right panel displays the <strong>environment</strong> that will be populated with objects in your workspace. If you, for example, save a value into a variable, the variable will be displayed here.</p>
-<p>The bottom right panel displays plots, can be used to browse files, manage packages, and view help pages. Now, we will use this panel, specifically its <strong>Files</strong> tab, to set the working directory. Open the Files tab, and navigate to the root of the folder you downloaded in the <a href="introduction.html">introduction chapter</a> (<code>toolbox/</code>). Then set this folder as your working directory by clicking the “More” button in the Files tab.</p>
+<p>The bottom right panel displays plots, can be used to browse files, manage packages, and view help pages. Now, we will use this panel, specifically its <strong>Files</strong> tab, to set the working directory. Open the Files tab, and navigate to the root of the <code>toolbox</code> folder (remember where you saved it on your computer?). Then set this folder as your working directory by clicking the “More” button in the Files tab.</p>
 <p><img src="images/setwd.png" alt="setwd" width=40%></p>
 <p>R now understands that any command that refers to outside files should refer to files within this directory. For instance, we can use R to access the file <code>LICENSE.md</code> in the current working directory (don’t worry about the command, but appreciate that R can access this file and print its contents):</p>
 <p><img src="images/cat_license.png" alt="print license" height=500px></p>
@@ -421,7 +418,7 @@ div.tocify {
 </div>
 <div id="install-packages" class="section level2">
 <h2>Install packages</h2>
-<p>As I explained in the introduction, we will rely on additional packages to the R programming language. Additional packages are user-contributed “modules” containing multiple functions to make using R easier, and to prevent us from having to re-invent the wheel. Installing these packages is simple; you only need to call a few functions in R. So, with R open, enter the following commands to the console:</p>
+<p>We will rely on additional packages to the R programming language. Additional packages are user-contributed “modules” containing multiple functions to make using R easier, and to prevent us from having to re-invent the wheel. Installing these packages is simple; you only need to call a few functions in R. So, with R open, enter the following commands to the console:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">&quot;readr&quot;</span>)
 <span class="kw">install.packages</span>(<span class="st">&quot;dplyr&quot;</span>)
 <span class="kw">install.packages</span>(<span class="st">&quot;ggplot2&quot;</span>)

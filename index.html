@@ -17,7 +17,7 @@
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<link href="site_libs/bootstrap-3.3.5/css/sandstone.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
@@ -83,34 +83,34 @@ button.code-folding-btn:focus {
 <style type="text/css">
 /* padding for bootstrap navbar */
 body {
-  padding-top: 51px;
+  padding-top: 61px;
   padding-bottom: 40px;
 }
 /* offset scroll position for anchor links (for fixed navbar)  */
 .section h1 {
-  padding-top: 56px;
-  margin-top: -56px;
+  padding-top: 66px;
+  margin-top: -66px;
 }
 
 .section h2 {
-  padding-top: 56px;
-  margin-top: -56px;
+  padding-top: 66px;
+  margin-top: -66px;
 }
 .section h3 {
-  padding-top: 56px;
-  margin-top: -56px;
+  padding-top: 66px;
+  margin-top: -66px;
 }
 .section h4 {
-  padding-top: 56px;
-  margin-top: -56px;
+  padding-top: 66px;
+  margin-top: -66px;
 }
 .section h5 {
-  padding-top: 56px;
-  margin-top: -56px;
+  padding-top: 66px;
+  margin-top: -66px;
 }
 .section h6 {
-  padding-top: 56px;
-  margin-top: -56px;
+  padding-top: 66px;
+  margin-top: -66px;
 }
 </style>
 
@@ -164,19 +164,16 @@ $(document).ready(function () {
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="index.html"></a>
+      <a class="navbar-brand" href="index.html">Toolbox 2.0</a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="index.html">
-    <span class="fa fa-home"></span>
+  <a href="rrstudio.html">
+    <span class="fa fa-code"></span>
      
-    Toolbox
+    R &amp; RStudio
   </a>
-</li>
-<li>
-  <a href="introduction.html">Introduction</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -202,10 +199,10 @@ $(document).ready(function () {
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="questionnaire.html">Questionnaire data</a>
+      <a href="reshape.html">Reshaping data</a>
     </li>
     <li>
-      <a href="reshape.html">Reshaping data</a>
+      <a href="questionnaire.html">Questionnaire data</a>
     </li>
   </ul>
 </li>
@@ -255,35 +252,25 @@ $(document).ready(function () {
 </div>
 
 
-<p>Welcome to the Psychologist’s data toolbox 2.0. This website contains educational materials on using <a href="https://www.r-project.org/"><strong>R</strong></a> and <a href="https://www.rstudio.com/"><strong>RStudio</strong></a> for effective data wrangling and visualization. In addition to introductory materials, there are tutorials for Psychology-specific data-analytic scenarios. Get started by clicking on the menu items above.</p>
-<p>For first-time R users, I recommend reading the sections of this website in order (from left to right in the above navigation bar.) First, you should read the <a href="introduction.html">introduction</a>, and then <a href="rrstudio.html">get to know the tools</a>. When you are familiar with the RStudio environment, common steps in the data-analytic workflow are covered in their typical order. If you already know how to import data, for example, skip that section and move right on to the next topics.</p>
-<ul>
-<li><a href="introduction.html">Introduction</a>
-<ul>
-<li>What is toolbox 2.0 and why do we need it?</li>
-</ul></li>
-<li><a href="rrstudio.html">R and RStudio</a>
-<ul>
-<li>Learn the basics of R and RStudio
-<ul>
-<li>No programming experience required</li>
-<li>100% success or money back guarantee</li>
-</ul></li>
-</ul></li>
-<li><a href="import.html">Importing data to R</a>
-<ul>
-<li>How to get data files to R</li>
-</ul></li>
-<li><a href="questionnaire.html">Data wrangling</a>
-<ul>
-<li>Get started with data wrangling using real questionnaire data</li>
-</ul></li>
-<li><a href="plotting.html">Data visualization</a>
-<ul>
-<li>Create common data visualizations in R</li>
-</ul></li>
-</ul>
+<p>Welcome to the Psychologist’s data toolbox 2.0. This website contains educational materials on using <a href="https://www.r-project.org/"><strong>R</strong></a> and <a href="https://www.rstudio.com/"><strong>RStudio</strong></a> for effective data wrangling, visualization and analysis. In addition to introductory materials, there are tutorials for Psychology-specific data-analytic scenarios. Get started by clicking on the menu items above. For first-time R users, I recommend reading the sections of this website in order (from left to right in the above navigation bar.)</p>
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>Many introductory statistics and research methods courses in psychology teach a particular workflow for moving from raw data to figures and statistical tests. This workflow heavily depends on two commercial tools: Microsoft Excel and IBM SPSS. Students of these courses are instructed to perform basic data manipulation tasks, such as renaming variables, aggregating (“pivot tables”) and subsetting data, etc., in Excel before proceeding to creating figures (in Excel or SPSS) and performing statistical inference (usually in SPSS.)</p>
+<p>Based on my experience, this workflow is also common among researchers. Although skilled analysts can and do perfrom brilliantly when constrained by this basic recipe, better alternatives have, unsurprisingly, sprung up in the past two decades. I propose that by abandoning this Excel -&gt; SPSS workflow (repeated <em>ad nauseam</em> with slight tweaks that require many a buttons to be repeatedly clicked), students and researchers gain a better understanding of their data, and become better equipped to rapidly investigate their data from multiple angles. Specifically, the approach I recommend is based on <em>programming your analysis</em>. For statistical programming, we will focus on the R programming language. (For an in-depth analysis of how R has overtaken SPSS on almost any metric, see <a href="http://r4stats.com/articles/popularity/">this post</a>.)</p>
+<p>Data is often messy and needs all sorts of transforms before it can be formally analyzed. Because this initial “data wrangling” usually needs to be repeated multiple times, the task can be greatly sped up by eschewing the use of Excel in favor of a programming language, where changing a few variables or arguments does what requires a completely new walk-through of the data in Excel. Similarly, because figures need to be repeatedly generated, creating them using code greatly reduces the required time for this step of a data-analytic workflow.</p>
+<div id="programming-is-your-friend" class="section level2">
+<h2>Programming is your friend</h2>
+<p>I recommend you follow the examples here by typing them into your own R script files, and execute them on your own computer. No prior knowledge of R or programming in general is required. However, programming is hard, and you learn it by doing it. Prepare to be frustrated, it is a natural part of learning programming.</p>
+</div>
+</div>
+<div id="this-tutorial" class="section level1">
+<h1>This tutorial</h1>
+<p>This tutorial consists of modules, where R is put to its proper use in wrangling different types of data. Users who wish to execute the code as they follow along should download <a href="https://github.com/mvuorre/toolbox/archive/master.zip">this zip file</a> and place its contents somewhere on their hard disk. This archive contains all the materials required to reproduce every exercise and command presented on these pages. After downloading the zip file, extract its contents in an appropriate location on your hard drive, say your Documents folder. The unzipped folder is called <code>toolbox-master</code>, but you should rename it to <code>toolbox</code> (my apologies, this is a GitHub quirk.)</p>
+</div>
+<div id="what-is-not-covered" class="section level1">
+<h1>What is not covered</h1>
 <p>Following data visualization, you would typically move to modelling the data, but this topic is outside the scope of these tutorials. I recommend reading a good textbook <span class="citation">(e.g. Kruschke, 2014; Maindonald &amp; Braun, 2010; McElreath, 2016)</span>.</p>
+</div>
 <div id="references" class="section level1 unnumbered">
 <h1>References</h1>
 <div id="refs" class="references">

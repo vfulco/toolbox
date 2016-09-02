@@ -33,7 +33,7 @@ The two panels on the left, which I chose to display with a black background for
 
 The two panels on the right are for maintaining the working environment, displaying plots, and doing all sorts of other miscellaneous neat things. The upper right panel displays the __environment__ that will be populated with objects in your workspace. If you, for example, save a value into a variable, the variable will be displayed here.
 
-The bottom right panel displays plots, can be used to browse files, manage packages, and view help pages. Now, we will use this panel, specifically its __Files__ tab, to set the working directory. Open the Files tab, and navigate to the root of the folder you downloaded in the [introduction chapter](introduction.html) (`toolbox/`). Then set this folder as your working directory by clicking the "More" button in the Files tab. 
+The bottom right panel displays plots, can be used to browse files, manage packages, and view help pages. Now, we will use this panel, specifically its __Files__ tab, to set the working directory. Open the Files tab, and navigate to the root of the `toolbox` folder (remember where you saved it on your computer?). Then set this folder as your working directory by clicking the "More" button in the Files tab. 
 
 <img src="images/setwd.png" alt="setwd" width=40%>
 
@@ -47,7 +47,7 @@ Equipped with this basic knowledge of R and RStudio, we can begin our first task
 
 ## Install packages
 
-As I explained in the introduction, we will rely on additional packages to the R programming language. Additional packages are user-contributed "modules" containing multiple functions to make using R easier, and to prevent us from having to re-invent the wheel. Installing these packages is simple; you only need to call a few functions in R. So, with R open, enter the following commands to the console:
+We will rely on additional packages to the R programming language. Additional packages are user-contributed "modules" containing multiple functions to make using R easier, and to prevent us from having to re-invent the wheel. Installing these packages is simple; you only need to call a few functions in R. So, with R open, enter the following commands to the console:
 
 ```{r, eval = F}
 install.packages("readr")

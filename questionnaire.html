@@ -11,7 +11,6 @@
 
 <meta name="author" content="Matti Vuorre" />
 
-<meta name="date" content="2016-09-02" />
 
 <title>Questionnaire data</title>
 
@@ -20,7 +19,7 @@
 <link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
 <script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<link href="site_libs/bootstrap-3.3.5/css/sandstone.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
@@ -131,34 +130,34 @@ button.code-folding-btn:focus {
 <style type="text/css">
 /* padding for bootstrap navbar */
 body {
-  padding-top: 51px;
+  padding-top: 61px;
   padding-bottom: 40px;
 }
 /* offset scroll position for anchor links (for fixed navbar)  */
 .section h1 {
-  padding-top: 56px;
-  margin-top: -56px;
+  padding-top: 66px;
+  margin-top: -66px;
 }
 
 .section h2 {
-  padding-top: 56px;
-  margin-top: -56px;
+  padding-top: 66px;
+  margin-top: -66px;
 }
 .section h3 {
-  padding-top: 56px;
-  margin-top: -56px;
+  padding-top: 66px;
+  margin-top: -66px;
 }
 .section h4 {
-  padding-top: 56px;
-  margin-top: -56px;
+  padding-top: 66px;
+  margin-top: -66px;
 }
 .section h5 {
-  padding-top: 56px;
-  margin-top: -56px;
+  padding-top: 66px;
+  margin-top: -66px;
 }
 .section h6 {
-  padding-top: 56px;
-  margin-top: -56px;
+  padding-top: 66px;
+  margin-top: -66px;
 }
 </style>
 
@@ -306,19 +305,16 @@ div.tocify {
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="index.html"></a>
+      <a class="navbar-brand" href="index.html">Toolbox 2.0</a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="index.html">
-    <span class="fa fa-home"></span>
+  <a href="rrstudio.html">
+    <span class="fa fa-code"></span>
      
-    Toolbox
+    R &amp; RStudio
   </a>
-</li>
-<li>
-  <a href="introduction.html">Introduction</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -344,10 +340,10 @@ div.tocify {
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="questionnaire.html">Questionnaire data</a>
+      <a href="reshape.html">Reshaping data</a>
     </li>
     <li>
-      <a href="reshape.html">Reshaping data</a>
+      <a href="questionnaire.html">Questionnaire data</a>
     </li>
   </ul>
 </li>
@@ -392,7 +388,6 @@ div.tocify {
 
 <h1 class="title toc-ignore">Questionnaire data</h1>
 <h4 class="author"><em>Matti Vuorre</em></h4>
-<h4 class="date"><em>2016-09-02</em></h4>
 
 </div>
 
@@ -400,7 +395,7 @@ div.tocify {
 <div id="introduction" class="section level1">
 <h1>Introduction</h1>
 <p>For this project we’ll be using a real data set, consisting of 19,719 individual’s responses to 50 questionnaire items that together constitute the Big Five personality scale. Additionally, each respondent provided their gender, age, race, native language and country. With this many respondents, items responded to, and categories by which we can split the responses, we can get answers to a rich set of questions. The data set is available <a href="http://personality-testing.info/_rawdata/BIG5.zip">here</a>, and you can complete the scale yourself on <a href="http://personality-testing.info/">this website</a>.</p>
-<p>Before we begin wrangling the data, we’ll go through an extremely important topic: Project Organization.</p>
+<p>Before we begin wrangling the data, we’ll go through an important topic: Project Organization.</p>
 </div>
 <div id="organizing-a-project" class="section level1">
 <h1>Organizing a Project</h1>
@@ -419,7 +414,7 @@ div.tocify {
 </div>
 <div id="prepare-a-session-in-rstudio" class="section level1">
 <h1>Prepare a session in RStudio</h1>
-<p>Before we can access the data in RStudio, we need to set the working directory. Do <strong>not</strong> set working directories in your script, because these calls make others with different root folder structures (usernames, systems, etc.) unable to run your script without changing these arguments. Instead, you can simply click the Set As Working Directory button in RStudio as described in <a href="http://mvuorre.github.io/toolbox/rrstudio/rrstudio.html#Get_started_with_RStudio">here</a>.</p>
+<p>Before we can access the data in RStudio, we need to set the working directory. Do <strong>not</strong> set working directories in your script, because these calls make others with different root folder structures (usernames, systems, etc.) unable to run your script without changing these arguments. Instead, you can simply click the Set As Working Directory button in RStudio (under the “More” button.)</p>
 <p>The raw data downloaded from the <a href="http://personality-testing.info/_rawdata/BIG5.zip">website</a> is a neat and simple spreadsheet of data, which we will load into the R workspace.</p>
 </div>
 <div id="load-the-data" class="section level1">
@@ -675,7 +670,7 @@ d &lt;-<span class="st"> </span><span class="kw">mutate</span>(
 </tr>
 </tbody>
 </table>
-<p>Much better! Now we can immediately see meaningful values of race, gender, etc. See <a href="multisource.html#Bonus_round">here</a> for how to change the two-letter country codes to actual country names.</p>
+<p>Much better! Now we can immediately see meaningful values of race, gender, etc.</p>
 </div>
 <div id="basic-summaries" class="section level2">
 <h2>Basic summaries</h2>
@@ -900,7 +895,7 @@ d &lt;-<span class="st"> </span><span class="kw">mutate</span>(
 Distributions of four of the Big Five categories across various countries
 </p>
 </div>
-<p>This figure took me about 10 minutes to make. But if I want to change something in it (aesthetics, grouping variables, exclude or include more data, manipulations…), it will take me about 20 seconds and the plot is redrawn with the desired changes. Do that in SPSS or Excel! And this is the point, we want to be able to <em>quickly</em> investigate our data from multiple angles. We’ll learn just that in the next section.</p>
+<p>This figure took me about 10 minutes to make. But if I want to change something in it (aesthetics, grouping variables, exclude or include more data, manipulations…), it will take me about 10 <em>seconds</em> and the plot is redrawn with the desired changes. Do that in SPSS or Excel! And this is the point, we want to be able to <em>quickly</em> investigate our data from multiple angles. We’ll learn just that in the next section.</p>
 </div>
 <div id="more-summaries" class="section level1">
 <h1>More summaries</h1>
@@ -938,8 +933,7 @@ Distributions of four of the Big Five categories across various countries
           <span class="dt">mE1 =</span> <span class="kw">mean</span>(E1),
           <span class="dt">mE2 =</span> <span class="kw">mean</span>(E2),
           <span class="dt">mE3 =</span> <span class="kw">mean</span>(E3))</code></pre></div>
-<pre><code>## Source: local data frame [1 x 3]
-## 
+<pre><code>## # A tibble: 1 x 3
 ##        mE1      mE2      mE3
 ##      &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
 ## 1 2.629224 2.759767 3.416794</code></pre>
@@ -959,8 +953,7 @@ Distributions of four of the Big Five categories across various countries
 <p>To answer these questions, we would like to group the data, and compute summaries of the output variables for each of the levels of a given grouping factor. <code>dplyr</code> provides an elegant way to do just that: Combining <code>summarise()</code> with <code>group_by()</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">d_by_gender &lt;-<span class="st"> </span><span class="kw">group_by</span>(d, gender)
 <span class="kw">summarise</span>(d_by_gender, <span class="dt">mE1 =</span> <span class="kw">mean</span>(E1))</code></pre></div>
-<pre><code>## Source: local data frame [4 x 2]
-## 
+<pre><code>## # A tibble: 4 x 2
 ##        gender      mE1
 ##        &lt;fctr&gt;    &lt;dbl&gt;
 ## 1 no_response 2.458333
@@ -975,8 +968,7 @@ Distributions of four of the Big Five categories across various countries
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">d %&gt;%
 <span class="st">    </span><span class="kw">group_by</span>(gender) %&gt;%
 <span class="st">    </span><span class="kw">summarise</span>(<span class="dt">mE1 =</span> <span class="kw">mean</span>(E1))</code></pre></div>
-<pre><code>## Source: local data frame [4 x 2]
-## 
+<pre><code>## # A tibble: 4 x 2
 ##        gender      mE1
 ##        &lt;fctr&gt;    &lt;dbl&gt;
 ## 1 no_response 2.458333
@@ -1035,8 +1027,7 @@ Distributions of four of the Big Five categories across various countries
 <h2>Subsets and filters</h2>
 <p>Let’s take a moment to reflect on our data:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">d</code></pre></div>
-<pre><code>## Source: local data frame [19,710 x 63]
-## 
+<pre><code>## # A tibble: 19,710 x 63
 ##       id                  race   age engnat gender   hand source country
 ##    &lt;chr&gt;                &lt;fctr&gt; &lt;int&gt; &lt;fctr&gt; &lt;fctr&gt; &lt;fctr&gt;  &lt;int&gt;   &lt;chr&gt;
 ## 1      1    caucasian_european    53    yes   male  right      1      US
@@ -1049,16 +1040,16 @@ Distributions of four of the Big Five categories across various countries
 ## 8      8      caucasian_indian    23     no   male  right      2      IN
 ## 9      9 caucasian_middle_east    39    yes female   both      4      US
 ## 10    10    caucasian_european    18    yes female  right      5      US
-## ..   ...                   ...   ...    ...    ...    ...    ...     ...
-## Variables not shown: E1 &lt;int&gt;, E2 &lt;int&gt;, E3 &lt;int&gt;, E4 &lt;int&gt;, E5 &lt;int&gt;, E6
-##   &lt;int&gt;, E7 &lt;int&gt;, E8 &lt;int&gt;, E9 &lt;int&gt;, E10 &lt;int&gt;, N1 &lt;int&gt;, N2 &lt;int&gt;, N3
-##   &lt;int&gt;, N4 &lt;int&gt;, N5 &lt;int&gt;, N6 &lt;int&gt;, N7 &lt;int&gt;, N8 &lt;int&gt;, N9 &lt;int&gt;, N10
-##   &lt;int&gt;, A1 &lt;int&gt;, A2 &lt;int&gt;, A3 &lt;int&gt;, A4 &lt;int&gt;, A5 &lt;int&gt;, A6 &lt;int&gt;, A7
-##   &lt;int&gt;, A8 &lt;int&gt;, A9 &lt;int&gt;, A10 &lt;int&gt;, C1 &lt;int&gt;, C2 &lt;int&gt;, C3 &lt;int&gt;, C4
-##   &lt;int&gt;, C5 &lt;int&gt;, C6 &lt;int&gt;, C7 &lt;int&gt;, C8 &lt;int&gt;, C9 &lt;int&gt;, C10 &lt;int&gt;, O1
-##   &lt;int&gt;, O2 &lt;int&gt;, O3 &lt;int&gt;, O4 &lt;int&gt;, O5 &lt;int&gt;, O6 &lt;int&gt;, O7 &lt;int&gt;, O8
-##   &lt;int&gt;, O9 &lt;int&gt;, O10 &lt;int&gt;, extraversion &lt;dbl&gt;, openness &lt;dbl&gt;,
-##   agreeableness &lt;dbl&gt;, neuroticism &lt;dbl&gt;, conscientiousness &lt;dbl&gt;.</code></pre>
+## # ... with 19,700 more rows, and 55 more variables: E1 &lt;int&gt;, E2 &lt;int&gt;,
+## #   E3 &lt;int&gt;, E4 &lt;int&gt;, E5 &lt;int&gt;, E6 &lt;int&gt;, E7 &lt;int&gt;, E8 &lt;int&gt;, E9 &lt;int&gt;,
+## #   E10 &lt;int&gt;, N1 &lt;int&gt;, N2 &lt;int&gt;, N3 &lt;int&gt;, N4 &lt;int&gt;, N5 &lt;int&gt;, N6 &lt;int&gt;,
+## #   N7 &lt;int&gt;, N8 &lt;int&gt;, N9 &lt;int&gt;, N10 &lt;int&gt;, A1 &lt;int&gt;, A2 &lt;int&gt;, A3 &lt;int&gt;,
+## #   A4 &lt;int&gt;, A5 &lt;int&gt;, A6 &lt;int&gt;, A7 &lt;int&gt;, A8 &lt;int&gt;, A9 &lt;int&gt;, A10 &lt;int&gt;,
+## #   C1 &lt;int&gt;, C2 &lt;int&gt;, C3 &lt;int&gt;, C4 &lt;int&gt;, C5 &lt;int&gt;, C6 &lt;int&gt;, C7 &lt;int&gt;,
+## #   C8 &lt;int&gt;, C9 &lt;int&gt;, C10 &lt;int&gt;, O1 &lt;int&gt;, O2 &lt;int&gt;, O3 &lt;int&gt;, O4 &lt;int&gt;,
+## #   O5 &lt;int&gt;, O6 &lt;int&gt;, O7 &lt;int&gt;, O8 &lt;int&gt;, O9 &lt;int&gt;, O10 &lt;int&gt;,
+## #   extraversion &lt;dbl&gt;, openness &lt;dbl&gt;, agreeableness &lt;dbl&gt;,
+## #   neuroticism &lt;dbl&gt;, conscientiousness &lt;dbl&gt;</code></pre>
 <p>Although we just computed the by-person summaries of each of the Big Five items, we don’t actually see this in the output, because the data frame contains so many variables. We would therefore like to subset our data.</p>
 <div id="subset-like-a-pro-select" class="section level3">
 <h3>Subset like a pro: <code>select()</code></h3>
@@ -1070,8 +1061,7 @@ Distributions of four of the Big Five categories across various countries
        -<span class="kw">starts_with</span>(<span class="st">&quot;N&quot;</span>, <span class="dt">ignore.case=</span>F),
        -<span class="kw">starts_with</span>(<span class="st">&quot;C&quot;</span>, <span class="dt">ignore.case=</span>F),
        -<span class="kw">starts_with</span>(<span class="st">&quot;A&quot;</span>, <span class="dt">ignore.case=</span>F))</code></pre></div>
-<pre><code>## Source: local data frame [19,710 x 12]
-## 
+<pre><code>## # A tibble: 19,710 x 12
 ##       id                  race   age engnat gender   hand country
 ##    &lt;chr&gt;                &lt;fctr&gt; &lt;int&gt; &lt;fctr&gt; &lt;fctr&gt; &lt;fctr&gt;   &lt;chr&gt;
 ## 1      1    caucasian_european    53    yes   male  right      US
@@ -1084,9 +1074,9 @@ Distributions of four of the Big Five categories across various countries
 ## 8      8      caucasian_indian    23     no   male  right      IN
 ## 9      9 caucasian_middle_east    39    yes female   both      US
 ## 10    10    caucasian_european    18    yes female  right      US
-## ..   ...                   ...   ...    ...    ...    ...     ...
-## Variables not shown: extraversion &lt;dbl&gt;, openness &lt;dbl&gt;, agreeableness
-##   &lt;dbl&gt;, neuroticism &lt;dbl&gt;, conscientiousness &lt;dbl&gt;.</code></pre>
+## # ... with 19,700 more rows, and 5 more variables: extraversion &lt;dbl&gt;,
+## #   openness &lt;dbl&gt;, agreeableness &lt;dbl&gt;, neuroticism &lt;dbl&gt;,
+## #   conscientiousness &lt;dbl&gt;</code></pre>
 <p><code>select()</code> takes a data frame as its first argument, followed by arbitrarily many variables in that data frame that you would like to include or exclude. Because we appended a <code>-</code> to <code>source</code>, we requested that it be excluded. The following lines are slightly more complicated, but do many tasks at once.</p>
 <p><code>-starts_with(&quot;E&quot;, ignore.case=F)</code> says that we would like to select every variable that starts with an E, specify that case should not be ignored (because we don’t want to select variables beginning with small <em>e</em>), and exclude these variables by starting the command with a negation. As a result, the printed data frame is now much cleaner to look at.</p>
 <p>Notice that I didn’t actually save the output anywhere. Temporary objects and files simply clutter our workspace and project folders, so we try to abstain from producing intermediate data files.</p>

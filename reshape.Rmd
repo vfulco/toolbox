@@ -34,7 +34,7 @@ Each row in this data set represents all the variables collected for a single in
 
 ## Long form
 
-Data in the long format, on the other hand, has only one row per observation, and therefore multiple observations of a single individual are distributed to many rows. Each row, therefore, has a number of columns representing the context of the observation. For example, here's some time-series data of a beaver's body temperature (that's right) in long form:
+Data in the long format, on the other hand, has only one row per observation, and therefore multiple observations of a single individual are distributed to many rows. Each row, therefore, has a number of columns representing the context of the observation. For example, here's some time-series data of a beaver's body temperature in long form:
 
 ```{r beavers, echo = -2}
 b1 <- head(beaver1)[,-4]

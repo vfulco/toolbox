@@ -9,6 +9,7 @@ csl: common/apa.csl
 
 ```{r chunk_opts, echo=F, warning=FALSE, message=FALSE, results = 'hide'}
 source("common/chunk_opts.R")
+knitr::opts_chunk$set(cache = F)
 ```
 
 # Introduction
@@ -21,26 +22,19 @@ This example data is a file downloaded from <http://personality-testing.info/_ra
 
 ## Locating the data file
 
-If you have downloaded the toolbox materials, the relevant folder for this tutorial is `/toolbox/`. So, we can fire up RStudio and navigate to the folder using RStudio's file navigator, and set it as the working directory:
-
-<img src="images/browse.gif" alt="Browse to location gif">
+If you have downloaded the toolbox materials, the relevant folder for this tutorial is `/toolbox/`. So, we can fire up RStudio and navigate to the folder using RStudio's file navigator, and set it as the working directory by clicking More -> Set as Working Directory
 
 The data file is in `/toolbox/data/nerdy/` and is called `NPAS-data.csv`. The `.csv` extension means that the data are in a Comma Separated Values format, which is a common format for data; any Excel spreadsheet, for example, can be exported as a `.csv`, and both Excel and SPSS can open `.csv` files. There is also a `codebook.txt` file, detailing what the various variables in the `.csv` file mean.
 
-<img src="images/files.png" alt="Contents of /data/">
-
-It's important to recognize that R only looks for external files in the current working directory. You can see the current working directory on top of the R console, or print it in the console by typing `getwd()` and pressing `return`:
-
-<img src="images/cwd.png" alt="cwd" width="400">
-
-Your working directory will be slightly different, because the default printout includes the username and other preceding folders.
+It's important to recognize that R only looks for external files in the current working directory. You can see the current working directory on top of the R console, or print it in the console by typing `getwd()` and pressing `return`.
 
 ## Importing the data file
 
 Now that we know the location and name of the data file, and the current working directory, we can ask R to read the `.csv` file from the `data/` folder by using the relative path to the file. To read files to the R environment, we need a function that does just that: `read.csv()`. 
 
-```{r read_csv}
+```{r read_csv, echo = -2}
 d <- read.csv("data/nerdy/NPAS-data.csv")
+d <- dplyr::select(d, education, age, major, nerdy)  # Only look at these
 ```
 
 The above function, `read.csv()` takes multiple arguments, but for the present purposes we only passed the location and name of the file to it, as a text string, and save the function call to `d`. `d` now contains the contents of the `.csv` in a format that R understands, namely, it is a `data.frame`.
@@ -65,13 +59,13 @@ This view reveals more of the actual values of the variables, and you can scroll
 
 Finally, we'll view the data within the R console, by typing a few simple commands. There are two very useful functions to quickly look at the data: `str()` and `head()`. `str()` prints out the structure of the `data.frame`:
 
-```{r str}
+```{r str, cache = F}
 str(d)
 ```
 
 And `head()` shows the first six rows of the `data.frame`:
 
-```{r head}
+```{r head, cache = F}
 head(d)
 ```
 
@@ -124,44 +118,36 @@ In this example, we'll learn to work with multiple source data files using the s
 
 ## Show your work
 
-In order to analyse all the data in R (or any other program), the files need to be combined into one object within the programming environment. Additionally, we can create a shortcut for later analyses by saving this "master" data object into a file. However, it is crucial that you don't just save this new master file, but also the first step in the data analytic pipeline: The merging of multiple source files. After all, it is possible that we commit an error at this stage, and if we haven't detailed what happened at this stage, we will not know what that error was, or how it influenced the data we analysed. Therefore, I generally recommend only saving the R script that produces master data frames from raw data, not the resulting master data file. If the merging step takes a long time (and it won't if you have fewer than a million observations), then you may also save the master data file, and load it on subsequent analyses of data instead of running the merging script every time. In any case, the merging script __must__ be saved as well. This constitutes the first note on the paper trail we leave for future investigators, including your future self. Now that we're motivated to begin a reproducible workflow, let's locate the files.
+In order to analyse all the data in R (or any other program), the files need to be combined into one object within the programming environment. Additionally, we can create a shortcut for later analyses by saving this "master" data object into a file. However, it is crucial that you don't just save this new master file, but also the first step in the data analytic pipeline: The merging of multiple source files. After all, it is possible that we commit an error at this stage, and if we haven't detailed what happened at this stage, we will not know what that error was, or how it influenced the data we analysed. Therefore, I strongly recommend saving the R script that produces master data frames from raw data. This constitutes the first note on the paper trail we leave for future investigators, including your future self. Now that we're motivated to begin a reproducible workflow, let's locate the files.
 
 ## Locating the files
 
 The raw data downloaded from the [website](http://personality-testing.info/_rawdata/BIG5.zip) is a neat and simple spreadsheet, but for our purposes, I've split the data into separate files by country. To look at the source files, we use the `list.files()` function that simply takes a path as input, and shows what's in that path. These data are located in `data/countries/`.
 
-```{r}
+```{r, results='hold'}
 file_path <- "data/big5/countries/"
-list.files(file_path)
+length(list.files(file_path))  # How many files are there?
+list.files(file_path)[1:5]  # Show first 5 names
 ```
 
-We would certainly like to avoid manually copying and pasting these files into one master file in Excel. Fortunately, programming allows us to [DRY](https://en.wikipedia.org/wiki/Don't_repeat_yourself), and we can load and merge these data with a few lines of code. 
+The `[1:5]` means that I would only like to access elements 1 through 10 of this object, i.e. the first ten names. We would certainly like to avoid manually copying and pasting these 155 files into one master file in Excel. Fortunately, programming allows us to [DRY](https://en.wikipedia.org/wiki/Don't_repeat_yourself), and we can load and merge these data with a few lines of code. 
 
-Before we begin, make sure that your working directory is set: It should be the `toolbox/` folder:
-
-```{r}
-getwd()
-```
-
-If this is not correct, use the file navigator in RStudio and click on "Set as working directory" when you are in this folder (note that the folders preceding `/toolbox/` are different on your computer).
+Before we begin, make sure that your working directory is set by running `getwd()`: It should be the `toolbox/` folder.
 
 ## Merging two data files
 
-The first step is to investigate what the shape of the data is, so let's read and investigate a single source file, the Big Five questionnaire responses from Papua New Guinea. Above, when dealing with a single source file, we used `read.csv()` to import .csv files into R. But here I will use another function, from the __readr__ package [@wickham_readr:_2015], because it will prove to be more flaxible later on. Using it is equally easy (but make sure it is [installed](rrstudio.html).)
+The first step is to investigate what the shape of the data is, so let's read and investigate a single source file, the Big Five questionnaire responses from Papua New Guinea. 
 
 ```{r}
-library(readr)  # For enhanced data file reading functions
-pg <- read_csv("data/big5/countries/PG.csv")
-pg
+pg <- read.csv("data/big5/countries/PG.csv")
+str(pg)
 ```
 
 To learn about what I called the **shape** of the data, we need to know its dimensions. These are listed on top of the displayed output, above. The object `pg` is a data frame with 2 rows and 57 columns. Each row is an observation, and each column is a variable. The easiest merging operation would be to add more rows to this data from a data frame that has the same columns, such as the data collected in Guatemala:
 
 ```{r}
-( gt <- read_csv("data/big5/countries/GT.csv") )
+gt <- read.csv("data/big5/countries/GT.csv")
 ```
-
-Note how I enclosed the line of code in parentheses. By doing so, I asked R to evaluate the code _and_ print out the resulting object. Neat. 
 
 This data frame also has 57 columns, and both data sets are two-dimensional[^1]. To merge these data sets, we simply need to bind them by row. But before we merge data frames, we need to be sure that the columns mean the same thing in both. One way to do this is to inspect the names of the columns, and make sure that they match up. The `names()` function returns the column names of the data frame, and we can compare the names of two data frames by comparing them with the logical `==` (equals) operator:
 
@@ -172,16 +158,10 @@ names(pg) == names(gt)
 The equality between each column name in `pg` and `gt` is `TRUE`. This is machine language for: "Stuff's the same." We can therefore proceed and bind the data frames by row. For this task, Rs built-in `rbind()` is the right tool:
 
 ```{r}
-rbind(pg, gt)
+pg_and_gt <- rbind(pg, gt)
 ```
 
-Job done! Kind of... Although `rbind()` does its job well, we instead turn to another gem from the __dplyr__ package [@wickham_dplyr:_2015]: `bind_rows()`. This function allows us to do more complex operations, such as joining _lists_ of data frames, without extra complications, and is therefore preferred:
-
-```{r}
-(pg_and_gt <- bind_rows(pg, gt))
-```
-
-Great! Although we were able to efficiently combine two source data files with this procedure, many projects, such as this one, can have hundreds of source data files, and we wouldn't want to write out `read_csv("XX.csv")` for each of the files separately. Therefore we'll _write a function_ that reads an arbitrary number of data files into a single object!
+Job done! Although we were able to efficiently combine two source data files with this procedure, many projects, such as this one, can have hundreds of source data files, and we wouldn't want to write out `read.csv("XX.csv")` for each of the files separately. Therefore we'll _write a function_ that reads an arbitrary number of data files into a single object!
 
 ## Merging more than two data files
 
@@ -191,10 +171,10 @@ A common task, such as this one, has of course been solved many times over, and 
 
 What follows is based on [this function]((https://gist.github.com/crsh/357458c41fd3d554fb24)), but I've tweaked it a little bit. First, here is what the function looks like:
 
-```{r, echo = F}
+```{r, echo = T}
 batch_read <- function(path, extension) {
   file_names <- list.files(path, pattern = extension)
-  data_list <- lapply(paste0(path, file_names), read_csv)
+  data_list <- lapply(paste0(path, file_names), read.csv)
   data_frame <- bind_rows(data_list)
   data_frame 
   }
@@ -215,16 +195,17 @@ paste(string1, string2)
 paste0(string1, string2)
 ```
 
-Because `path` is a text string, and `file_names` is a list of text strings, the result is a new list of text strings. The result of `paste0(path, file_names)` is then passed to `lapply()`, which simply means _list apply_. `lapply()` takes as its first argument a list, here the list of file names. The second argument to `lapply()` is the function to apply to the list: We want to `read_csv()`. This line, therefore, _reads a list of csv files_, and saves the list into `data_list`: A list containing a whole bunch of data frames create by repeatedly applying `read_csv()` to file names in the list of names. 
+Because `path` is a text string, and `file_names` is a list of text strings, the result is a new list of text strings. The result of `paste0(path, file_names)` is then passed to `lapply()`, which simply means _list apply_. `lapply()` takes as its first argument a list, here the list of file names. The second argument to `lapply()` is the function to apply to the list: We want to `read.csv()`. This line, therefore, _reads a list of csv files_, and saves the list into `data_list`: A list containing a whole bunch of data frames create by repeatedly applying `read.csv()` to file names in the list of names. 
 
-A final step remains: The list needs to be unpacked into a data frame. Above, I alluded to how `bind_rows()` does all sorts of neat things. Well, this is just one of those things, we simply passed the list of data frames (`data_list`) to `bind_rows()`, which then created a single object (called `data_frame`). The last line of the function definition specifies what is to be returned when a user calls this function.
+A final step remains: The list needs to be unpacked into a data frame. We simply passed the list of data frames (`data_list`) to `bind_rows()`, which then created a single object (called `data_frame`). The last line of the function definition specifies what is to be returned when a user calls this function.
 
 I said before that programming is hard. You learn it by doing it. The preceding discussion is abstract and elusive and we will learn faster by implementing the function ourselves. To create this function, type the following code into your R script, and run it:
 
 ```{r}
+library(dplyr)  # We need this for the bind_rows() function
 batch_read <- function(path, extension) {
   file_names <- list.files(path, pattern = extension)
-  data_list <- lapply(paste0(path, file_names), read_csv)
+  data_list <- lapply(paste0(path, file_names), read.csv)
   data_frame <- bind_rows(data_list)
   data_frame
 }
@@ -240,7 +221,7 @@ Let's put our shiny new `batch_read()` to use and load our data. Recall that `fi
 d <- batch_read(file_path, ".csv")
 ```
 
-There! We read all the .csv files in `file_path` (`r file_path`). If we would like to save the new master data file as a single .csv, we could run the following code (but recall the discussion above about _not saving intermediate data files, but only the *procedure* that generated those data files_):
+There! We read all the .csv files in `file_path` (`r file_path`). If we would like to save the new master data file as a single .csv, we could run the following code:
 
 ```{r, eval = F}
 write_csv(d, path = "data/big5/master-data.csv")
@@ -251,10 +232,10 @@ write_csv(d, path = "data/big5/master-data.csv")
 `d` now contains all the Big Five questionnaire responses, from all the data files:
 
 ```{r}
-d
+dim(d)
 ```
 
-To get to work with this data, take a look at the [questionnaire data tutorial](questionnaire.html).
+19324 rows and 57 columns. That's a lot of data. To get to work with these data, take a look at the [questionnaire data tutorial](questionnaire.html).
 
 # Bonus round
 
