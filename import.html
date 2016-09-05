@@ -11,7 +11,6 @@
 
 <meta name="author" content="Matti Vuorre" />
 
-<meta name="date" content="2016-09-02" />
 
 <title>Importing data to R</title>
 
@@ -389,27 +388,26 @@ div.tocify {
 
 <h1 class="title toc-ignore">Importing data to R</h1>
 <h4 class="author"><em>Matti Vuorre</em></h4>
-<h4 class="date"><em>2016-09-02</em></h4>
 
 </div>
 
 
 <div id="introduction" class="section level1">
 <h1>Introduction</h1>
-<p>In SPSS or Excel, importing data is fairly self-explanatory: The user clicks through various menu items to locate the relevant data file in the computer’s hard drive, and opens the file. In R, the analoguous operation is to <em>import data to the environment</em> (the environment is just an abstract collection of objects that R has access to.) Here, we’ll locate data on the hard drive using RStudio’s file dialogue, import the file to the workspace, and print its content’s in the console. After learning how to work with a single source data file, we’ll cover how to import multiple source data files to R and combine them into a single object.</p>
+<p>In SPSS or Excel, importing data is fairly self-explanatory: The user clicks through various menu items to locate the relevant data file in the computer’s hard drive, and opens the file. In R, the analoguous operation is to <em>read data to the environment</em> (the environment is just an abstract collection of objects that R has access to.) Here, we’ll locate data on the hard drive using RStudio’s file dialogue, import the file to the workspace, and print its content’s in the console. After learning how to work with a single source data file, we’ll cover how to import multiple source data files to R and combine them into a single object.</p>
 </div>
 <div id="single-source-data-file" class="section level1">
 <h1>Single source data file</h1>
 <p>This example data is a file downloaded from <a href="http://personality-testing.info/_rawdata/" class="uri">http://personality-testing.info/_rawdata/</a>, and contains answers to the <a href="http://personality-testing.info/tests/NPAS/">Nerdy Personality Attributes Scale</a>, along with some demographic variables. I have removed some variables from the file that are not relevant for the present purposes.</p>
 <div id="locating-the-data-file" class="section level2">
 <h2>Locating the data file</h2>
-<p>If you have downloaded the toolbox materials, the relevant folder for this tutorial is <code>/toolbox/</code>. So, we can fire up RStudio and navigate to the folder using RStudio’s file navigator, and set it as the working directory by clicking More -&gt; Set as Working Directory</p>
-<p>The data file is in <code>/toolbox/data/nerdy/</code> and is called <code>NPAS-data.csv</code>. The <code>.csv</code> extension means that the data are in a Comma Separated Values format, which is a common format for data; any Excel spreadsheet, for example, can be exported as a <code>.csv</code>, and both Excel and SPSS can open <code>.csv</code> files. There is also a <code>codebook.txt</code> file, detailing what the various variables in the <code>.csv</code> file mean.</p>
+<p>If you have downloaded the toolbox materials, the relevant folder for this tutorial is <code>/toolbox/</code>. So, we can fire up RStudio and navigate to the folder using RStudio’s file navigator, and set it as the working directory by clicking More -&gt; Set as Working Directory in the <strong>Files</strong> panel of RStudio.</p>
+<p>The data file is in <code>/toolbox/data/nerdy/</code> and is called <code>NPAS-data.csv</code>. To find it, recall where you placed the <code>/toolbox/</code> folder on your computer. The <code>.csv</code> extension means that the data are in a Comma Separated Values format, which is a common format for data; any Excel spreadsheet, for example, can be exported as a <code>.csv</code>, and both Excel and SPSS can open <code>.csv</code> files. There is also a <code>codebook.txt</code> file, detailing what the various variables in the <code>.csv</code> file mean.</p>
 <p>It’s important to recognize that R only looks for external files in the current working directory. You can see the current working directory on top of the R console, or print it in the console by typing <code>getwd()</code> and pressing <code>return</code>.</p>
 </div>
 <div id="importing-the-data-file" class="section level2">
 <h2>Importing the data file</h2>
-<p>Now that we know the location and name of the data file, and the current working directory, we can ask R to read the <code>.csv</code> file from the <code>data/</code> folder by using the relative path to the file. To read files to the R environment, we need a function that does just that: <code>read.csv()</code>.</p>
+<p>Now that we know the location and name of the data file, and the current working directory, we can ask R to read the <code>.csv</code> file from the <code>data/</code> folder by using the relative path to the file. To read files to the R environment, we need a function that does just that: <code>read.csv()</code>. Assuming that your working directory is the <code>/toolbox/</code> folder, the command is</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">d &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;data/nerdy/NPAS-data.csv&quot;</span>)</code></pre></div>
 <p>The above function, <code>read.csv()</code> takes multiple arguments, but for the present purposes we only passed the location and name of the file to it, as a text string, and save the function call to <code>d</code>. <code>d</code> now contains the contents of the <code>.csv</code> in a format that R understands, namely, it is a <code>data.frame</code>.</p>
 <p>Why did we write <code>read.csv(&quot;data/nerdy/NPAS-data.csv&quot;)</code> instead of <code>read.csv(data/nerdy/NPAS-data.csv)</code>? Enclosing a string of text into quotation marks in R means that you are referring to a <em>string</em> of text, which is appropriate in this case. If you leave out the quotation marks, R thinks that you are talking about an object, which is not found in the R environment.</p>
@@ -556,7 +554,7 @@ Mean nerdiness (±1 SEM) for most common majors.
 <p>A common task, such as this one, has of course been solved many times over, and we shouldn’t be wasting our time reinventing the wheel. We therefore will use a <a href="https://gist.github.com/crsh/357458c41fd3d554fb24">function that another R user has already shared</a> on the excellent open-source programming platform <a href="https://github.com/">GitHub</a>.</p>
 <div id="creating-a-function" class="section level3">
 <h3>Creating a function</h3>
-<p>What follows is based on <a href="(https://gist.github.com/crsh/357458c41fd3d554fb24)">this function</a>, but I’ve tweaked it a little bit. First, here is what the function looks like:</p>
+<p>What follows is based on <a href="https://gist.github.com/crsh/357458c41fd3d554fb24">this function</a>, but I’ve tweaked it a little bit. First, here is what the function looks like:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">batch_read &lt;-<span class="st"> </span>function(path, extension) {
   file_names &lt;-<span class="st"> </span><span class="kw">list.files</span>(path, <span class="dt">pattern =</span> extension)
   data_list &lt;-<span class="st"> </span><span class="kw">lapply</span>(<span class="kw">paste0</span>(path, file_names), read.csv)

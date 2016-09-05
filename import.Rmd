@@ -1,7 +1,6 @@
 ---
 title: "Importing data to R"
 author: "Matti Vuorre"
-date: "`r Sys.Date()`"
 output: html_document
 bibliography: common/bibliography.bib
 csl: common/apa.csl
@@ -14,7 +13,7 @@ knitr::opts_chunk$set(cache = F)
 
 # Introduction
 
-In SPSS or Excel, importing data is fairly self-explanatory: The user clicks through various menu items to locate the relevant data file in the computer's hard drive, and opens the file. In R, the analoguous operation is to _import data to the environment_ (the environment is just an abstract collection of objects that R has access to.) Here, we'll locate data on the hard drive using RStudio's file dialogue, import the file to the workspace, and print its content's in the console. After learning how to work with a single source data file, we'll cover how to import multiple source data files to R and combine them into a single object. 
+In SPSS or Excel, importing data is fairly self-explanatory: The user clicks through various menu items to locate the relevant data file in the computer's hard drive, and opens the file. In R, the analoguous operation is to _read data to the environment_ (the environment is just an abstract collection of objects that R has access to.) Here, we'll locate data on the hard drive using RStudio's file dialogue, import the file to the workspace, and print its content's in the console. After learning how to work with a single source data file, we'll cover how to import multiple source data files to R and combine them into a single object. 
 
 # Single source data file
 
@@ -22,15 +21,15 @@ This example data is a file downloaded from <http://personality-testing.info/_ra
 
 ## Locating the data file
 
-If you have downloaded the toolbox materials, the relevant folder for this tutorial is `/toolbox/`. So, we can fire up RStudio and navigate to the folder using RStudio's file navigator, and set it as the working directory by clicking More -> Set as Working Directory
+If you have downloaded the toolbox materials, the relevant folder for this tutorial is `/toolbox/`. So, we can fire up RStudio and navigate to the folder using RStudio's file navigator, and set it as the working directory by clicking More -> Set as Working Directory in the **Files** panel of RStudio.
 
-The data file is in `/toolbox/data/nerdy/` and is called `NPAS-data.csv`. The `.csv` extension means that the data are in a Comma Separated Values format, which is a common format for data; any Excel spreadsheet, for example, can be exported as a `.csv`, and both Excel and SPSS can open `.csv` files. There is also a `codebook.txt` file, detailing what the various variables in the `.csv` file mean.
+The data file is in `/toolbox/data/nerdy/` and is called `NPAS-data.csv`. To find it, recall where you placed the `/toolbox/` folder on your computer. The `.csv` extension means that the data are in a Comma Separated Values format, which is a common format for data; any Excel spreadsheet, for example, can be exported as a `.csv`, and both Excel and SPSS can open `.csv` files. There is also a `codebook.txt` file, detailing what the various variables in the `.csv` file mean.
 
 It's important to recognize that R only looks for external files in the current working directory. You can see the current working directory on top of the R console, or print it in the console by typing `getwd()` and pressing `return`.
 
 ## Importing the data file
 
-Now that we know the location and name of the data file, and the current working directory, we can ask R to read the `.csv` file from the `data/` folder by using the relative path to the file. To read files to the R environment, we need a function that does just that: `read.csv()`. 
+Now that we know the location and name of the data file, and the current working directory, we can ask R to read the `.csv` file from the `data/` folder by using the relative path to the file. To read files to the R environment, we need a function that does just that: `read.csv()`. Assuming that your working directory is the `/toolbox/` folder, the command is
 
 ```{r read_csv, echo = -2}
 d <- read.csv("data/nerdy/NPAS-data.csv")
@@ -169,7 +168,7 @@ A common task, such as this one, has of course been solved many times over, and 
 
 ### Creating a function
 
-What follows is based on [this function]((https://gist.github.com/crsh/357458c41fd3d554fb24)), but I've tweaked it a little bit. First, here is what the function looks like:
+What follows is based on [this function](https://gist.github.com/crsh/357458c41fd3d554fb24), but I've tweaked it a little bit. First, here is what the function looks like:
 
 ```{r, echo = T}
 batch_read <- function(path, extension) {

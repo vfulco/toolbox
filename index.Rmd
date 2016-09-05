@@ -29,7 +29,7 @@ I recommend you follow the examples here by typing them into your own R script f
 
 # This tutorial
 
-This tutorial consists of modules, where R is put to its proper use in wrangling different types of data. Users who wish to execute the code as they follow along should download [this zip file](https://github.com/mvuorre/toolbox/archive/master.zip) and place its contents somewhere on their hard disk. This archive contains all the materials required to reproduce every exercise and command presented on these pages. After downloading the zip file, extract its contents in an appropriate location on your hard drive, say your Documents folder. The unzipped folder is called `toolbox-master`, but you should rename it to `toolbox` (my apologies, this is a GitHub quirk.) 
+This tutorial consists of modules, where R is put to its proper use in wrangling different types of data. Users who wish to execute the code as they follow along should download [this zip file](https://github.com/mvuorre/toolbox/archive/master.zip) and place its contents somewhere on their hard disk. This archive contains all the materials required to reproduce every exercise and command presented on these pages. After downloading the zip file, extract its contents in an appropriate location on your hard drive, say your Documents folder. The unzipped folder is called `toolbox-master`, but you should rename it to `toolbox`. 
 
 # What is not covered
 
